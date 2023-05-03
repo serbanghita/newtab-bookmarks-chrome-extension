@@ -1,0 +1,37 @@
+<html>
+<head>
+    <script src="popup.js" type="module"></script>
+    <link rel="stylesheet" href="./popup.css" />
+    <title>New Tab Unlimited Bookmarks</title>
+</head>
+    <body>
+        <div id="settings">
+            <fieldset>
+                <legend>Settings for NewTab Bookmarks Extension</legend>
+
+                <div>
+                    <p><label class="label" for="settings-root-folder">Bookmarks folder name:</label></p>
+                    <p><input type="text" name="settings-root-folder" id="settings-root-folder" /></p>
+                    <p><i>Choose existing or new bookmark folder for your "Start page" bookmarks.</i></p>
+                </div>
+
+                <div>
+                    <p><label class="label">Display icons:</label></p>
+                    <p>
+                        <label>
+                            Yes <input type="radio" name="settings-display-icons" id="settings-display-icons-yes" value="yes" />
+                        </label>
+                        <label>
+                            No <input type="radio" name="settings-display-icons" id="settings-display-icons-no" value="no" checked />
+                        </label>
+                    </p>
+                    <p><i>Display icons from bookmarks URLs.</i></p>
+                </div>
+
+                <div>
+                    <button id="setting-save">Save</button>
+                </div>
+            </fieldset>
+        </div>
+    </body>
+</html>

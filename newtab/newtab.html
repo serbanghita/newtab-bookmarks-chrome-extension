@@ -1,0 +1,36 @@
+<html>
+    <head>
+        <title>New tab</title>
+        <link rel="stylesheet" href="./newtab.css" />
+        <script src="newtab.js" type="module"></script>
+    </head>
+    <body>
+        <div id="bookmarks">
+
+        </div>
+        <div id="add-bookmark">
+            <form>
+                <fieldset>
+                    <legend>Add bookmark</legend>
+
+                    <div>
+                        <p><label for="add-bookmark-title">Title:</label></p>
+                        <p><input type="text" name="title" id="add-bookmark-title" placeholder="My Important Bookmark Title" /></p>
+                    </div>
+
+                    <div>
+                        <p><label for="add-bookmark-url">URL:</label></p>
+                        <p><input type="text" name="url" id="add-bookmark-url" placeholder="https://..." /></p>
+                    </div>
+
+                    <div>
+                        <button>Add</button>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+        <pre id="bookmarks-settings"></pre>
+    </body>
+</html>
+
+

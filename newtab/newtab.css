@@ -1,0 +1,21 @@
+#bookmarks {
+    border: 1px dotted #ccc;
+    padding: 1em;
+}
+
+.bookmark {
+    padding: 1em;
+    display: inline-block;
+}
+
+.bookmark-icon {
+    text-align: center;
+}
+
+.bookmark-link {
+    text-align: center;
+}
+
+#add-bookmark fieldset {
+    border: 1px dotted #ccc;
+}

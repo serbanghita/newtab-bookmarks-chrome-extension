@@ -1,0 +1,11 @@
+body {
+    width: 20rem;
+}
+
+#settings fieldset {
+    border: 1px dotted #ccc;
+}
+
+#settings .label {
+    font-weight: bold;
+}
