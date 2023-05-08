@@ -6,7 +6,7 @@
   "author": {
     "email": "serbanghita@gmail.com"
   },
-  "homepage_url": "",
+  "homepage_url": "https://github.com/serbanghita/newtab-bookmarks-chrome-extension",
   "permissions": ["bookmarks", "storage", "favicon"],
   "action": {
     "default_popup": "popup/popup.html",
