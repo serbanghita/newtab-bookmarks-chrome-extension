@@ -1,3 +1,14 @@
+/**
+ * Functions
+ */
+function $(id) {
+    return document.getElementById(id);
+}
+
+function $q(cssSelector) {
+    return document.querySelector(cssSelector);
+}
+
 async function getBookmarks() {
     return await chrome.bookmarks.getTree();
 }
@@ -10,18 +21,28 @@ async function removeBookmark(id) {
     return await chrome.bookmarks.remove(id);
 }
 
+async function moveBookmark(fromId, toId) {
+    return await chrome.bookmarks.move(fromId, { index: toId });
+}
+
 async function addFolder(parentId, title) {
     return await chrome.bookmarks.create({ parentId, title });
 }
 
 async function getSettings() {
-    return await chrome.storage.local.get("newtab-bookmarks");
+    const settings =  await chrome.storage.local.get("newtab-bookmarks");
+
+    return settings["newtab-bookmarks"] || Object.create(null);
 }
 
-async function saveSettings(key, value) {
+async function saveSetting(key, value) {
     const currentSettings = await getSettings() || {};
     const newSettings = [...currentSettings, {key: value}];
 
+    return await chrome.storage.local.set({"newtab-bookmarks": newSettings});
+}
+
+async function saveSettings(newSettings) {
     return await chrome.storage.local.set({"newtab-bookmarks": newSettings});
 }
 
@@ -32,37 +53,144 @@ function faviconURL(u) {
     return url.toString();
 }
 
-// Bootstrap.
-const bookmarks = await getBookmarks();
-const $bookmarks = document.getElementById("bookmarks");
+function searchBookmarksTree(title, treeItem) {
+    if (!title) {
+        return null;
+    }
+    if (title === treeItem.title) {
+        return treeItem;
+    }
 
-bookmarks[0].children[0].children.forEach((bookmark) => {
-    if (bookmark.children) {
+    if (treeItem.children?.length > 0) {
+        let result = null;
+        for (let i = 0; i<treeItem.children.length; i++) {
+            result = searchBookmarksTree(title, treeItem.children[i]);
+            if (result !== null) {
+                return result;
+            }
+        }
+    }
+
+    return null;
+}
+
+async function getBookmarksBySettings() {
+    const bookmarks = await getBookmarks();
+    const settings = await getSettings();
+    return searchBookmarksTree(settings["rootFolderName"], bookmarks[0]);
+}
+
+async function renderBookmarks() {
+    const bookmarks = await getBookmarksBySettings();
+    const $bookmarks = $("bookmarks");
+
+    if (!bookmarks) {
+        const $noBookmarksMsg = $("no-bookmarks-msg");
+        $noBookmarksMsg.style.display = 'visible';
         return;
     }
 
-    const $bookmark = document.createElement("div");
-    $bookmark.className = "bookmark";
+    bookmarks.children.forEach((bookmark) => {
+        if (bookmark.children) {
+            return;
+        }
 
-    // Img.
-    const $bookmarkImg = document.createElement('img');
-    $bookmarkImg.src = faviconURL(bookmark.url);
-    $bookmarkImg.className = "bookmark-icon";
+        const $bookmark = document.createElement("div");
+        $bookmark.classList.add("bookmark");
+        $bookmark.classList.add("flex-item");
+        $bookmark.onclick = () => {
+            $bookmark.classList.add("loading");
+            setTimeout(() => {
+                window.location.href = bookmark.url;
+            }, 0);
 
-    // Link.
-    const $bookmarkA = document.createElement("a");
-    $bookmarkA.setAttribute("href", bookmark.url);
-    $bookmarkA.innerText = bookmark.title;
-    $bookmarkA.className = "bookmark-link";
+        };
 
-    const $bookmarkLink = document.createElement("div");
-    $bookmarkLink.appendChild($bookmarkA);
+        // Img.
+        const $bookmarkImg = document.createElement('img');
+        $bookmarkImg.src = faviconURL(bookmark.url);
+        $bookmarkImg.className = "bookmark-icon";
 
-    $bookmark.appendChild($bookmarkImg);
-    $bookmark.appendChild($bookmarkLink);
+        // Link.
+        const $bookmarkLink = document.createElement("div");
+        $bookmarkLink.innerText = bookmark.title;
+        $bookmarkLink.className = "bookmark-link";
 
-    $bookmarks.appendChild($bookmark);
-});
+        $bookmark.appendChild($bookmarkImg);
+        // $bookmark.style.backgroundImage = `url('${faviconURL(bookmark.url)}')`;
+        // $bookmark.style.backgroundPosition = 'bottom left 3px';
+        // $bookmark.style.backgroundRepeat = 'no-repeat';
+        // $bookmark.style.backgroundOrigin = 'border-box'
+        $bookmark.appendChild($bookmarkLink);
 
-const settings = await getSettings();
-document.getElementById("bookmarks-settings").innerHTML = JSON.stringify(settings);
+        $bookmarks.appendChild($bookmark);
+    });
+}
+
+/**
+ * "Add bookmark"
+ */
+function preRenderAddBookmarkDialog() {
+    const $addBookmarkDialog = $("add-bookmark-dialog");
+    const $addBookmarkItem = $("add-bookmark-item");
+    $addBookmarkItem.addEventListener("click", () => {
+        $addBookmarkDialog.showModal();
+    });
+    const $addBookmarkBtn = $("add-bookmark-btn");
+    $addBookmarkBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        addBookmark(
+            0,
+            $("add-bookmark-title").value.trim(),
+            $("add-bookmark-url").value.trim()
+        ).then(() => {
+            $addBookmarkDialog.close();
+        });
+    });
+}
+
+/**
+ * "Settings
+ */
+async function preRenderSettingsDialog() {
+    const settings = await getSettings();
+    const $settingsDialog = $("settings-dialog");
+    const $settingsItem = $("settings-item");
+
+    $("settings-root-folder").value = settings.rootFolderName;
+    $(`settings-display-icons-${settings.displayIcons || "no"}`).checked = true;
+
+    $settingsItem.addEventListener("click", () => {
+        $settingsDialog.showModal();
+    });
+
+    const $saveSettingsBtn = $("settings-save-btn");
+    $saveSettingsBtn.addEventListener("click", (e) => {
+        e.preventDefault();
+
+        saveSettings({
+            rootFolderName: $("settings-root-folder").value,
+            displayIcons: $q('input[name="settings-display-icons"]:checked').value
+        }).then(() => {
+            $settingsDialog.close();
+        })
+    });
+}
+
+async function renderSettingsDebug() {
+    const settings = await getSettings();
+
+    $("bookmarks-settings-debug").innerHTML = JSON.stringify(settings);
+}
+
+/**
+ * Bootstrap
+ *
+ * "List desired bookmarks"
+ */
+await renderBookmarks();
+// preRenderAddBookmarkDialog();
+await preRenderSettingsDialog();
+// await renderSettingsDebug();
+

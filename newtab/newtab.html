@@ -5,13 +5,27 @@
         <script src="newtab.js" type="module"></script>
     </head>
     <body>
-        <div id="bookmarks">
+        <div id="no-bookmarks-msg">
+            <p>Welcome to "New Tab Unlimited Bookmarks" extension!</p>
 
+            <p>You need to configure your source for the bookmarks first.
+            Press "Settings" and choose a folder.</p>
+
+            <p>Enjoy!</p>
         </div>
-        <div id="add-bookmark">
-            <form>
-                <fieldset>
-                    <legend>Add bookmark</legend>
+        <div id="bookmarks" class="flex-container">
+<!--            <div class="bookmark bookmark-util-item flex-item" id="add-bookmark-item">-->
+<!--&lt;!&ndash;                <div class="bookmark-icon">+</div>&ndash;&gt;-->
+<!--                <div class="bookmark-link">Add bookmark</div>-->
+<!--            </div>-->
+            <div class="bookmark bookmark-util-item flex-item" id="settings-item">
+<!--                <div class="bookmark-icon">:::</div>-->
+                <div class="bookmark-link">Settings</div>
+            </div>
+        </div>
+        <dialog id="add-bookmark-dialog" class="dialog">
+            <form method="dialog">
+                    <h1 class="title">Add bookmark</h1>
 
                     <div>
                         <p><label for="add-bookmark-title">Title:</label></p>
@@ -20,16 +34,43 @@
 
                     <div>
                         <p><label for="add-bookmark-url">URL:</label></p>
-                        <p><input type="text" name="url" id="add-bookmark-url" placeholder="https://..." /></p>
+                        <p><input type="text" name="url" id="add-bookmark-url" placeholder="https://..." autocomplete="off" /></p>
                     </div>
 
                     <div>
-                        <button>Add</button>
+                        <button id="add-bookmark-btn">Add</button>
                     </div>
-                </fieldset>
             </form>
-        </div>
-        <pre id="bookmarks-settings"></pre>
+        </dialog>
+        <dialog id="settings-dialog" class="dialog">
+            <form method="dialog">
+                <h1 class="title">Settings</h1>
+
+                <div>
+                    <p><label class="label" for="settings-root-folder">Bookmarks folder name:</label></p>
+                    <p><input type="text" name="settings-root-folder" id="settings-root-folder" /></p>
+                    <p><i>Choose existing or new bookmark folder for your "Start page" bookmarks.</i></p>
+                </div>
+
+                <div>
+                    <p><label class="label">Display icons:</label></p>
+                    <p>
+                        <label>
+                            Yes <input type="radio" name="settings-display-icons" id="settings-display-icons-yes" value="yes" />
+                        </label>
+                        <label>
+                            No <input type="radio" name="settings-display-icons" id="settings-display-icons-no" value="no" />
+                        </label>
+                    </p>
+                    <p><i>Display icons from bookmarks URLs.</i></p>
+                </div>
+
+                <div>
+                    <button id="settings-save-btn">Save</button>
+                </div>
+            </form>
+        </dialog>
+        <pre id="bookmarks-settings-debug"></pre>
     </body>
 </html>
 

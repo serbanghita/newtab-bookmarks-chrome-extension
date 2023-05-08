@@ -1,21 +1,96 @@
-#bookmarks {
-    border: 1px dotted #ccc;
+#no-bookmarks-msg {
     padding: 1em;
+    text-align: center;
+    display: none;
+}
+
+#bookmarks {
+    padding: 1em;
+}
+
+.flex-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+    align-content: flex-start;
+    gap: 1em;
+    /*align-items: center;*/
+}
+
+.flex-item {
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: flex-start;
+    min-height: 5em;
+}
+
+.bookmark-util-item {
+    order: 1;
+    background-color: rgba(100, 200, 0, 0.1);
+    font-size: x-large;
+    min-height: auto;
+    flex-basis: 100%;
+}
+
+.bookmark-util-item .bookmark-icon {
+    text-align: center;
+    font-size: 2em;
 }
 
 .bookmark {
-    padding: 1em;
+    min-width: 4em;
+    max-width: 8em;
+    /*width: 8em;*/
+    /*height: 8em;*/
     display: inline-block;
+    text-align: center;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    padding:0.5em;
+    box-shadow: inset 0 -2em 2em rgba(0, 0, 0, 0.1), 0 0 0 2px rgb(255, 255, 255),
+    0.3em 0.3em 1em rgba(0, 0, 0, 0.1);
+    position: relative;
+    line-height: 1.2em;
+}
+
+.bookmark.loading,
+.bookmark.loading:hover {
+    cursor: progress;
+    border: 1px solid rgba(255, 255, 0, 1);
+}
+
+.bookmark:hover {
+    box-shadow: inset 0 -2em 2em rgba(255, 255, 0, 0.5), 0 0 0 2px rgb(255, 255, 255),
+    0.3em 0.3em 1em rgba(50, 50, 50, 0.3);
+    cursor: pointer;
+    border-style: solid;
 }
 
 .bookmark-icon {
-    text-align: center;
+    position: absolute;
+    z-index: 1;
+    left: -8px;
+    top: -8px;
 }
 
 .bookmark-link {
+    overflow: hidden;
     text-align: center;
+    color: rgb(0,0, 238);
+    text-decoration: none;
 }
 
-#add-bookmark fieldset {
-    border: 1px dotted #ccc;
+.dialog {
+    width: 30em;
+}
+
+.dialog .title {
+    margin-top: 0;
+}
+
+.dialog input[type=text],
+.dialog button {
+    width: 100%;
 }
