@@ -86,7 +86,7 @@ async function renderBookmarks() {
 
     if (!bookmarks) {
         const $noBookmarksMsg = $("no-bookmarks-msg");
-        $noBookmarksMsg.style.display = 'visible';
+        $noBookmarksMsg.style.display = 'block';
         return;
     }
 
@@ -158,7 +158,7 @@ async function preRenderSettingsDialog() {
     const $settingsDialog = $("settings-dialog");
     const $settingsItem = $("settings-item");
 
-    $("settings-root-folder").value = settings.rootFolderName;
+    $("settings-root-folder").value = settings.rootFolderName || "";
     $(`settings-display-icons-${settings.displayIcons || "no"}`).checked = true;
 
     $settingsItem.addEventListener("click", () => {

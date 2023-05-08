@@ -1,7 +1,14 @@
 #no-bookmarks-msg {
     padding: 1em;
-    text-align: center;
+    width: 32em;
+    border: 1px solid black;
+    margin: 1em auto;
+    line-height: 1.4em;
     display: none;
+}
+
+#no-bookmarks-msg .title {
+    margin-top: 0;
 }
 
 #bookmarks {
@@ -83,7 +90,7 @@
 }
 
 .dialog {
-    width: 30em;
+    width: 32em;
 }
 
 .dialog .title {
