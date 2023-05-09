@@ -1,10 +1,11 @@
 <html lang="en">
-    <head>
-        <title>New tab</title>
-        <link rel="stylesheet" href="./newtab.css" />
-        <script src="newtab.js" type="module"></script>
-    </head>
-    <body>
+<head>
+    <title>New tab</title>
+    <link rel="stylesheet" href="./newtab.css" />
+    <script src="newtab.js" type="module"></script>
+</head>
+<body>
+    <div id="wrapper">
         <div id="no-bookmarks-msg">
             <h1 class="title">Readme</h1>
 
@@ -25,11 +26,12 @@
 <!--&lt;!&ndash;                <div class="bookmark-icon">+</div>&ndash;&gt;-->
 <!--                <div class="bookmark-link">Add bookmark</div>-->
 <!--            </div>-->
-            <div class="bookmark bookmark-util-item flex-item" id="settings-item">
-<!--                <div class="bookmark-icon">:::</div>-->
-                <div class="bookmark-link">Settings</div>
-            </div>
+<!--            <div class="bookmark bookmark-util-item flex-item" id="settings-item">-->
+<!--&lt;!&ndash;                <div class="bookmark-icon">:::</div>&ndash;&gt;-->
+<!--                <div class="bookmark-link">Settings</div>-->
+<!--            </div>-->
         </div>
+        <div id="settings-link">&#9881; Settings</div>
         <dialog id="add-bookmark-dialog" class="dialog">
             <form method="dialog">
                     <h1 class="title">Add bookmark</h1>
@@ -78,7 +80,8 @@
             </form>
         </dialog>
         <pre id="bookmarks-settings-debug"></pre>
-    </body>
+    </div>
+</body>
 </html>
 
 

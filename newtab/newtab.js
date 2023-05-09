@@ -156,12 +156,12 @@ function preRenderAddBookmarkDialog() {
 async function preRenderSettingsDialog() {
     const settings = await getSettings();
     const $settingsDialog = $("settings-dialog");
-    const $settingsItem = $("settings-item");
+    const $settingsLink = $("settings-link");
 
     $("settings-root-folder").value = settings.rootFolderName || "";
     $(`settings-display-icons-${settings.displayIcons || "no"}`).checked = true;
 
-    $settingsItem.addEventListener("click", () => {
+    $settingsLink.addEventListener("click", () => {
         $settingsDialog.showModal();
     });
 
