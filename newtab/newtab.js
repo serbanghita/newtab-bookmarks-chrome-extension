@@ -43,13 +43,14 @@ async function saveSetting(key, value) {
 }
 
 async function saveSettings(newSettings) {
-    return await chrome.storage.local.set({"newtab-bookmarks": newSettings});
+    await chrome.storage.local.set({"newtab-bookmarks": newSettings});
+    return newSettings;
 }
 
-function faviconURL(u) {
+function faviconURL(u, imgSize) {
     const url = new URL(chrome.runtime.getURL("/_favicon/"));
     url.searchParams.set("pageUrl", u);
-    url.searchParams.set("size", "16");
+    url.searchParams.set("size", imgSize || "16");
     return url.toString();
 }
 
@@ -81,14 +82,22 @@ async function getBookmarksBySettings() {
 }
 
 async function renderBookmarks() {
+    const settings = await getSettings();
     const bookmarks = await getBookmarksBySettings();
     const $bookmarks = $("bookmarks");
+    const $wrapper = $("wrapper");
 
     if (!bookmarks) {
         const $noBookmarksMsg = $("no-bookmarks-msg");
         $noBookmarksMsg.style.display = 'block';
         return;
     }
+
+    // Set CSS settings to the main wrapper (so we can paint conditionally later with CSS).
+    Object.keys(settings).forEach((settingName) => {
+        const settingValue = settings[settingName];
+        $wrapper.classList.add(`${settingName}--${settingValue}`);
+    });
 
     bookmarks.children.forEach((bookmark) => {
         if (bookmark.children) {
@@ -108,7 +117,7 @@ async function renderBookmarks() {
 
         // Img.
         const $bookmarkImg = document.createElement('img');
-        $bookmarkImg.src = faviconURL(bookmark.url);
+        $bookmarkImg.src = faviconURL(bookmark.url, settings && settings["bookmarkItemSize"]==="large" ? 32 : 16);
         $bookmarkImg.className = "bookmark-icon";
 
         // Link.
@@ -158,8 +167,12 @@ async function preRenderSettingsDialog() {
     const $settingsDialog = $("settings-dialog");
     const $settingsLink = $("settings-link");
 
-    $("settings-root-folder").value = settings.rootFolderName || "";
-    $(`settings-display-icons-${settings.displayIcons || "no"}`).checked = true;
+    // Set form default values from Chrome's "storage".
+    $("settings-root-folder").value = settings.rootFolderName || '';
+    $("settings-bookmarks-width").value = settings.bookmarksWidth || 'full-screen';
+    $("settings-bookmark-item-icon").value = settings.bookmarkItemIcon || 'yes';
+    $("settings-bookmark-item-size").value = settings.bookmarkItemSize || 'small';
+    $("settings-show-subfolders").value = settings.bookmarksShowSubfolders || 'no';
 
     $settingsLink.addEventListener("click", () => {
         $settingsDialog.showModal();
@@ -171,9 +184,13 @@ async function preRenderSettingsDialog() {
 
         saveSettings({
             rootFolderName: $("settings-root-folder").value,
-            displayIcons: $q('input[name="settings-display-icons"]:checked').value
-        }).then(() => {
+            bookmarksWidth: $("settings-bookmarks-width").value,
+            bookmarkItemIcon: $("settings-bookmark-item-icon").value,
+            bookmarkItemSize: $("settings-bookmark-item-size").value,
+            bookmarksShowSubfolders: $("settings-show-subfolders").value
+        }).then((newSettings) => {
             $settingsDialog.close();
+            window.location.reload();
         })
     });
 }

@@ -1,20 +1,52 @@
 body {
     background-color: #eee;
+    padding: 1em;
 }
 
 #wrapper {
-    width: 60em;
     margin: 0 auto;
+    padding: 1em;
     border: 1px solid #a7a7a7;
     box-shadow: 3px 3px 2px 0px #eeeeee;
     background-color: white;
 }
 
-#no-bookmarks-msg {
-    width: 100%;
-    border: 1px solid black;
-    line-height: 1.4em;
+#wrapper.bookmarkItemIcon--no .bookmark-icon {
     display: none;
+}
+
+#wrapper.bookmarkItemSize--medium .bookmark {
+    font-size: 1.5em;
+    line-height: 1.5em;
+}
+
+#wrapper.bookmarkItemSize--large .bookmark {
+    font-size: 1.8em;
+    line-height: 1.5em;
+}
+
+#wrapper.bookmarkItemSize--large .bookmark .bookmark-icon {
+    width: 32px;
+}
+
+#wrapper.bookmarksWidth--80 {
+    width: 80%;
+}
+
+#wrapper.bookmarksWidth--50 {
+    width: 50%;
+}
+
+#no-bookmarks-msg {
+    width: 50%;
+    line-height: 1.4em;
+    margin: 1em auto;
+    display: none;
+}
+
+#no-bookmarks-msg blockquote {
+    color: #686868;
+    font-size: 1.2em;
 }
 
 #no-bookmarks-msg .title {
@@ -24,17 +56,20 @@ body {
 #settings-link {
     text-decoration: underline;
     cursor: pointer;
+    display: block;
+    text-align: center;
 }
 
 #bookmarks {
     width: 100%;
+    margin-bottom: 1em;
 }
 
 .flex-container {
     display: flex;
     flex-direction: row;
     flex-wrap: wrap;
-    justify-content: center;
+    /*justify-content: center;*/
     align-content: flex-start;
     gap: 1em;
 }
@@ -51,55 +86,76 @@ body {
     /*max-width: 10em;*/
     display: inline-block;
     text-align: center;
-    border: 1px solid transparent;
-    border-radius: 5px;
+    /*border: 1px solid transparent;*/
+    /*border-radius: 5px;*/
     padding:0.5em;
     /*box-shadow: inset 0 -2em 2em rgba(0, 0, 0, 0.1), 0 0 0 2px rgb(255, 255, 255),*/
     /*0.3em 0.3em 1em rgba(0, 0, 0, 0.1);*/
     position: relative;
     line-height: 1.2em;
     font-family: monospace;
-    font-size: 1.2em;
+    font-size:1.2em;
+    border-bottom: 2px solid transparent;
 }
 
 .bookmark.loading,
 .bookmark.loading:hover {
     cursor: progress;
-    border: 1px solid red;
+    /*border: 1px solid red;*/
 }
 
 .bookmark:hover {
     /*box-shadow: inset 0 -2em 2em rgba(255, 255, 0, 0.5), 0 0 0 2px rgb(255, 255, 255),*/
     /*0.3em 0.3em 1em rgba(50, 50, 50, 0.3);*/
     cursor: pointer;
-    border: 1px solid rgb(0,0, 238);
-}
-
-.bookmark:hover .bookmark-link {
+    /*border: 1px solid rgb(0,0, 238);*/
     text-decoration: none;
+    border-bottom: 2px solid rgb(0,0, 238);
 }
 
 .bookmark-icon {
     vertical-align: middle;
     margin-right: 5px;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
 }
 
 .bookmark-link {
-    overflow: hidden;
     display: inline;
     color: rgb(0,0, 238);
-    text-decoration: underline;
 }
 
 .dialog {
-    width: 32em;
+    width: 60em;
 }
 
 .dialog .title {
     margin-top: 0;
 }
 
+.dialog .field-group {
+    width: 100%;
+    clear: both;
+    margin-bottom: 1em;
+    display: inline-block;
+}
+
+.dialog .field-label { width: 20em; padding-right: 1em; }
+.dialog .field-label-info { color: #686868; }
+
+.dialog .field-input,
+.dialog .field-label {
+    float: left;
+}
+
 .dialog input[type=text],
+.dialog select,
 .dialog button {
     width: 100%;
+    min-width: 20em;
+    border: 2px solid #a7a7a7;
+}
+
+.dialog button {
+    cursor: hand;
 }

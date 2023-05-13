@@ -9,14 +9,19 @@
         <div id="no-bookmarks-msg">
             <h1 class="title">Readme</h1>
 
-            <p>Welcome to "New Tab Unlimited Bookmarks" extension!</p>
+            <p>Welcome to "<img src="../images/icon-16.png" width="16" style="vertical-align: middle;" /> New Tab Unlimited Bookmarks" extension!</p>
+
+            <blockquote>
+                This extension is for those who wants to be more productive with their Chrome "Start page" / "New tab".<br/>
+                It allows you to add <b>unlimited</b> bookmarks and <b>customize</b> them so that every time you open a new tab
+                you can instantly find your most commonly used links.
+            </blockquote>
 
             <p>You need to <b>configure</b> your bookmarks source first:<p>
             <ol>
-                <li>Check your Bookmarks bar. <br />(if not visible, press CTRL+SHIFT+B)</li>
-                <li>Create or choose an existing bookmark folder. <br />(eg. "development")</li>
+                <li>First, check your Bookmarks bar, locate a folder that you want to show on your Chrome's Start page. <br />(if not visible, press CTRL+SHIFT+B)</li>
+                <li>Second, create or choose an existing bookmark folder. <br />(eg. "development")</li>
                 <li>Press "Settings" button below and add the name of that folder from Step 2. Save settings.</li>
-                <li>Refresh</li>
             </ol>
 
             <p>Enjoy!</p>
@@ -37,13 +42,13 @@
                     <h1 class="title">Add bookmark</h1>
 
                     <div>
-                        <p><label for="add-bookmark-title">Title:</label></p>
-                        <p><input type="text" name="title" id="add-bookmark-title" placeholder="My Important Bookmark Title" /></p>
+                        <div class="field-label"><label for="add-bookmark-title">Title:</label></div>
+                        <div class="field-input"><input type="text" name="title" id="add-bookmark-title" placeholder="My Important Bookmark Title" /></div>
                     </div>
 
                     <div>
-                        <p><label for="add-bookmark-url">URL:</label></p>
-                        <p><input type="text" name="url" id="add-bookmark-url" placeholder="https://..." autocomplete="off" /></p>
+                        <div class="field-label"><label for="add-bookmark-url">URL:</label></div>
+                        <div class="field-input"><input type="text" name="url" id="add-bookmark-url" placeholder="https://..." autocomplete="off" /></div>
                     </div>
 
                     <div>
@@ -55,27 +60,70 @@
             <form method="dialog">
                 <h1 class="title">Settings</h1>
 
-                <div>
-                    <p><label class="label" for="settings-root-folder">Bookmarks folder name:</label></p>
-                    <p><input type="text" name="settings-root-folder" id="settings-root-folder" /></p>
-                    <p><i>Choose existing or new bookmark folder for your "Start page" bookmarks.</i></p>
+                <div class="field-group">
+                    <div class="field-label">
+                        <label class="label" for="settings-root-folder">Bookmarks root folder:</label>
+                        <div class="field-label-info">Choose existing or new bookmark folder for your "Start page" bookmarks.</div>
+                    </div>
+                    <div class="field-input"><input type="text" name="settings-root-folder" id="settings-root-folder" /></div>
+                </div>
+
+                <div class="field-group" style="display: none;">
+                    <div class="field-label">
+                        <label for="settings-show-subfolders">Show sub-folders:</label>
+                        <div class="field-label-info">Display bookmarks from subfolders of the root folder.</div>
+                    </div>
+                    <div class="field-input">
+                        <select name="settings-show-subfolders" id="settings-show-subfolders">
+                            <option value="yes">yes</option>
+                            <option value="no">no</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <div class="field-label">
+                        <label for="settings-bookmarks-width">Bookmarks container width:</label>
+                        <div class="field-label-info">How much the bookmarks container will stretch.</div>
+                    </div>
+                    <div class="field-input">
+                        <select name="settings-bookmarks-width" id="settings-bookmarks-width">
+                            <option value="50">50%</option>
+                            <option value="80">80%</option>
+                            <option value="full-screen">full-screen</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <div class="field-label">
+                        <label class="label" for="settings-bookmark-item-icon">Bookmark item icon:</label>
+                        <div class="field-label-info">Display icons from bookmarks URLs.</div>
+                    </div>
+                    <div class="field-input">
+                        <select name="settings-bookmark-item-icon" id="settings-bookmark-item-icon">
+                            <option value="yes">yes</option>
+                            <option value="no">no</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <div class="field-label">
+                        <label for="settings-bookmark-item-size">Bookmark item size:</label>
+                        <div class="field-label-info">How big the bookmark item font and icon will render.</div>
+                    </div>
+                    <div class="field-input">
+                        <select name="settings-bookmark-item-size" id="settings-bookmark-item-size">
+                            <option value="small">small</option>
+                            <option value="medium">medium</option>
+                            <option value="large">large</option>
+                        </select>
+                    </div>
                 </div>
 
                 <div>
-                    <p><label class="label">Display icons:</label></p>
-                    <p>
-                        <label>
-                            Yes <input type="radio" name="settings-display-icons" id="settings-display-icons-yes" value="yes" />
-                        </label>
-                        <label>
-                            No <input type="radio" name="settings-display-icons" id="settings-display-icons-no" value="no" />
-                        </label>
-                    </p>
-                    <p><i>Display icons from bookmarks URLs.</i></p>
-                </div>
-
-                <div>
-                    <button id="settings-save-btn">Save</button>
+                    <button id="settings-save-btn" title="Save settings">Save</button>
                 </div>
             </form>
         </dialog>
