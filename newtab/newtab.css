@@ -3,127 +3,12 @@ body {
     padding: 1em;
 }
 
-#wrapper {
-    margin: 0 auto;
-    padding: 1em;
-    border: 1px solid #a7a7a7;
-    box-shadow: 3px 3px 2px 0px #eeeeee;
-    background-color: white;
-}
-
-#wrapper.bookmarkItemIcon--no .bookmark-icon {
-    display: none;
-}
-
-#wrapper.bookmarkItemSize--medium .bookmark {
-    font-size: 1.5em;
-    line-height: 1.5em;
-}
-
-#wrapper.bookmarkItemSize--large .bookmark {
-    font-size: 1.8em;
-    line-height: 1.5em;
-}
-
-#wrapper.bookmarkItemSize--large .bookmark .bookmark-icon {
-    width: 32px;
-}
-
-#wrapper.bookmarksWidth--80 {
-    width: 80%;
-}
-
-#wrapper.bookmarksWidth--50 {
-    width: 50%;
-}
-
-#no-bookmarks-msg {
-    width: 50%;
-    line-height: 1.4em;
-    margin: 1em auto;
-    display: none;
-}
-
-#no-bookmarks-msg blockquote {
-    color: #686868;
-    font-size: 1.2em;
-}
-
-#no-bookmarks-msg .title {
-    margin-top: 0;
-}
-
-#settings-link {
-    text-decoration: underline;
-    cursor: pointer;
-    display: block;
-    text-align: center;
-}
-
-#bookmarks {
-    width: 100%;
-    margin-bottom: 1em;
-}
-
-.flex-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    /*justify-content: center;*/
-    align-content: flex-start;
-    gap: 1em;
-}
-
-.flex-item {
-    flex-grow: 0;
-    flex-shrink: 1;
-    flex-basis: auto;
-    align-self: flex-start;
-}
-
-.bookmark {
-    /*min-width: 4em;*/
-    /*max-width: 10em;*/
-    display: inline-block;
-    text-align: center;
-    /*border: 1px solid transparent;*/
-    /*border-radius: 5px;*/
-    padding:0.5em;
-    /*box-shadow: inset 0 -2em 2em rgba(0, 0, 0, 0.1), 0 0 0 2px rgb(255, 255, 255),*/
-    /*0.3em 0.3em 1em rgba(0, 0, 0, 0.1);*/
-    position: relative;
-    line-height: 1.2em;
-    font-family: monospace;
-    font-size:1.2em;
-    border-bottom: 2px solid transparent;
-}
-
-.bookmark.loading,
-.bookmark.loading:hover {
-    cursor: progress;
-    /*border: 1px solid red;*/
-}
-
-.bookmark:hover {
-    /*box-shadow: inset 0 -2em 2em rgba(255, 255, 0, 0.5), 0 0 0 2px rgb(255, 255, 255),*/
-    /*0.3em 0.3em 1em rgba(50, 50, 50, 0.3);*/
-    cursor: pointer;
-    /*border: 1px solid rgb(0,0, 238);*/
-    text-decoration: none;
-    border-bottom: 2px solid rgb(0,0, 238);
-}
-
-.bookmark-icon {
-    vertical-align: middle;
-    margin-right: 5px;
-    image-rendering: crisp-edges;
-    image-rendering: pixelated;
-}
-
-.bookmark-link {
-    display: inline;
-    color: rgb(0,0, 238);
-}
+/******************************
+*                             *
+* Dialog                      *
+* - used for settings -       *
+*                             *
+*******************************/
 
 .dialog {
     width: 60em;
@@ -158,4 +43,188 @@ body {
 
 .dialog button {
     cursor: hand;
+}
+
+/******************************
+*                             *
+* CSS Flex container          *
+*                             *
+*******************************/
+
+.flex-container {
+    display: flex;
+    flex-direction: row;
+    flex-wrap: wrap;
+    /*justify-content: center;*/
+    align-content: flex-start;
+    gap: 1em;
+}
+
+.flex-item {
+    flex-grow: 0;
+    flex-shrink: 1;
+    flex-basis: auto;
+    align-self: flex-start;
+}
+
+/***********************************/
+
+#wrapper {
+    margin: 0 auto;
+    border: 1px solid #a7a7a7;
+    padding: 0.8em;
+    border-radius: 1.2em;
+    box-shadow: 3px 3px 2px 0 #eeeeee;
+    background-color: white;
+}
+
+#wrapper.bookmarkItemIcon--no .bookmark-icon {
+    display: none;
+}
+
+#wrapper.bookmarkItemSize--medium .bookmark {
+    font-size: 1.5em;
+    line-height: 1.5em;
+}
+
+#wrapper.bookmarkItemSize--large .bookmark {
+    font-size: 1.8em;
+    line-height: 1.5em;
+}
+
+#wrapper.bookmarkItemSize--large .bookmark .bookmark-icon {
+    width: 32px;
+}
+
+#wrapper.bookmarksWidth--80 {
+    width: 80%;
+}
+
+#wrapper.bookmarksWidth--50 {
+    width: 50%;
+}
+
+/******************************
+*                             *
+* No bookmarks                *
+* First install               *
+*******************************/
+
+#no-bookmarks-msg {
+    font-size: 1.4em;
+    line-height: 1.6em;
+    margin: 1em auto;
+    display: none;
+}
+
+#no-bookmarks-msg blockquote {
+    color: #686868;
+    font-size: 1.2em;
+}
+
+#no-bookmarks-msg .title {
+    margin-top: 0;
+}
+
+#settings-link {
+    text-decoration: underline;
+    cursor: pointer;
+    display: block;
+    text-align: center;
+}
+
+
+
+/******************************
+*                             *
+* Bookmarks from "Start page" *
+*                             *
+*******************************/
+#bookmarks {
+    width: 100%;
+    margin-bottom: 1em;
+}
+
+#bookmarks.blur {
+    filter: blur(4px);
+}
+
+.bookmark {
+    /*min-width: 4em;*/
+    /*max-width: 10em;*/
+    display: inline-block;
+    /*border: 1px solid transparent;*/
+    /*border-radius: 5px;*/
+    padding:0.5em;
+    /*box-shadow: inset 0 -2em 2em rgba(0, 0, 0, 0.1), 0 0 0 2px rgb(255, 255, 255),*/
+    /*0.3em 0.3em 1em rgba(0, 0, 0, 0.1);*/
+    position: relative;
+    line-height: 1.2em;
+    font-family: monospace;
+    font-size:1.2em;
+    border-bottom: 2px solid transparent;
+    text-align: left;
+}
+
+.bookmark.drag-sort-active {
+    border: 2px solid rgb(0,0, 238);
+}
+
+.bookmark.loading,
+.bookmark.loading:hover {
+    cursor: progress;
+    /*border: 1px solid red;*/
+}
+
+.bookmark:hover {
+    /*box-shadow: inset 0 -2em 2em rgba(255, 255, 0, 0.5), 0 0 0 2px rgb(255, 255, 255),*/
+    /*0.3em 0.3em 1em rgba(50, 50, 50, 0.3);*/
+    cursor: pointer;
+    /*border: 1px solid rgb(0,0, 238);*/
+    text-decoration: none;
+    border-bottom: 2px solid rgb(0,0, 238);
+}
+
+.bookmark-icon {
+    vertical-align: middle;
+    margin-right: 5px;
+    image-rendering: crisp-edges;
+    image-rendering: pixelated;
+}
+
+.bookmark-link {
+    display: inline;
+    color: rgb(0,0, 238);
+}
+
+
+
+/****** Search ******/
+#bookmarks-search {
+    text-align: center;
+    border-bottom: 1px dashed #a7a7a7;
+    margin-bottom: 1em;
+    position: relative;
+}
+#bookmarks-search-query {
+    font-family: monospace;
+    padding: 0.8em;
+    margin: 1em;
+    border-radius: 1.2em;
+    border: 1px solid #a7a7a7;
+    width: 50%;
+    caret-color: #a7a7a7;
+    caret-shape: bar;
+}
+
+#bookmarks-search-query:focus-visible {
+    outline: none;
+}
+
+#bookmarks-search-results {
+    width: 50%;
+    margin: 0 auto;
+    background-color: white;
+    z-index: 1;
+    text-align: left;
 }

@@ -2,6 +2,10 @@
 <head>
     <title>New tab</title>
     <link rel="stylesheet" href="./newtab.css" />
+    <script src="../common/utils.js"></script>
+    <script src="../common/Settings.js"></script>
+    <script src="../common/Bookmarks.js"></script>
+    <script src="../common/View.js"></script>
     <script src="newtab.js" type="module"></script>
 </head>
 <body>
@@ -25,6 +29,15 @@
             </ol>
 
             <p>Enjoy!</p>
+        </div>
+        <div id="bookmarks-search" style="display: none;">
+            <form id="bookmarks-search-form">
+                <input type="search" autocomplete="off" spellcheck="false" role="combobox"
+                       name="bookmarks-search-query" id="bookmarks-search-query" placeholder="Search my bookmarks ..." />
+            </form>
+            <div id="bookmarks-search-results" style="display: none;">
+
+            </div>
         </div>
         <div id="bookmarks" class="flex-container">
 <!--            <div class="bookmark bookmark-util-item flex-item" id="add-bookmark-item">-->
@@ -65,7 +78,7 @@
                         <label class="label" for="settings-root-folder">Bookmarks root folder:</label>
                         <div class="field-label-info">Choose existing or new bookmark folder for your "Start page" bookmarks.</div>
                     </div>
-                    <div class="field-input"><input type="text" name="settings-root-folder" id="settings-root-folder" /></div>
+                    <div class="field-input"><input type="text" name="settings-root-folder" id="settings-root-folder" required autocomplete="off" spellcheck="false" /></div>
                 </div>
 
                 <div class="field-group" style="display: none;">
@@ -118,6 +131,32 @@
                             <option value="small">small</option>
                             <option value="medium">medium</option>
                             <option value="large">large</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <div class="field-label">
+                        <label for="settings-bookmark-reorder">Bookmark reordering:</label>
+                        <div class="field-label-info">Allow bookmark dragging and rearranging.</div>
+                    </div>
+                    <div class="field-input">
+                        <select name="settings-bookmark-reorder" id="settings-bookmark-reorder">
+                            <option value="yes">yes</option>
+                            <option value="no">no</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="field-group">
+                    <div class="field-label">
+                        <label for="settings-bookmark-search-bar">Bookmark search bar:</label>
+                        <div class="field-label-info">Show or hide the bookmarks search bar.</div>
+                    </div>
+                    <div class="field-input">
+                        <select name="settings-bookmark-search-bar" id="settings-bookmark-search-bar">
+                            <option value="yes">yes</option>
+                            <option value="no">no</option>
                         </select>
                     </div>
                 </div>

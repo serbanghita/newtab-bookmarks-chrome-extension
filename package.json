@@ -1,6 +1,6 @@
 {
-  "name": "newtab-bookmarks",
-  "version": "1.0.0",
+  "name": "newtab-bookmarks-chrome-extension",
+  "version": "3.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
