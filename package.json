@@ -1,6 +1,6 @@
 {
   "name": "newtab-bookmarks-chrome-extension",
-  "version": "3.0.0",
+  "version": "3.1.0",
   "description": "",
   "main": "index.js",
   "scripts": {
@@ -9,6 +9,11 @@
   "author": "Serban Ghita",
   "license": "MIT",
   "devDependencies": {
-    "@types/chrome": "^0.0.235"
+    "@types/chrome": "^0.1.4",
+    "esbuild": "0.25.9",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "chrome-types": "^0.1.370"
   }
 }
