@@ -2,24 +2,24 @@
   "manifest_version": 3,
   "name": "New Tab Unlimited Bookmarks",
   "description": "Add unlimited bookmarks to the Chrome start page. Works with existing bookmarks folders.",
-  "version": "3.0",
+  "version": "3.1.0",
   "author": {
     "email": "serbanghita@gmail.com"
   },
   "homepage_url": "https://github.com/serbanghita/newtab-bookmarks-chrome-extension",
   "permissions": ["bookmarks", "storage", "favicon"],
   "action": {
-    "default_popup": "popup/popup.html",
-    "default_icon": "images/icon-16.png"
+    "default_popup": "dist/popup/popup.html",
+    "default_icon": "dist/images/icon-16.png"
   },
   "icons": {
-    "16": "images/icon-16.png",
-    "32": "images/icon-32.png",
-    "48": "images/icon-48.png",
-    "128": "images/icon-128.png"
+    "16": "dist/images/icon-16.png",
+    "32": "dist/images/icon-32.png",
+    "48": "dist/images/icon-48.png",
+    "128": "dist/images/icon-128.png"
   },
   "chrome_url_overrides" : {
-    "newtab": "newtab/newtab.html"
+    "newtab": "dist/newtab/newtab.html"
   },
   "web_accessible_resources": [
     {

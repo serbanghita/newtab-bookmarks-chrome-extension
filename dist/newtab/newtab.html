@@ -1,34 +1,36 @@
 <html lang="en">
 <head>
     <title>New tab</title>
-    <link rel="stylesheet" href="./newtab.css" />
-    <script src="../common/utils.js"></script>
-    <script src="../common/Settings.js"></script>
-    <script src="../common/Bookmarks.js"></script>
-    <script src="../common/View.js"></script>
-    <script src="newtab.js" type="module"></script>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="../newtab/newtab.css" />
+    <script src="../js/newtab.js"></script>
 </head>
 <body>
     <div id="wrapper">
         <div id="no-bookmarks-msg">
-            <h1 class="title">Readme</h1>
+            <h1><img src="../images/icon-48.png" width="48" style="vertical-align: middle;" /> New Tab Unlimited Bookmarks</h1>
 
-            <p>Welcome to "<img src="../images/icon-16.png" width="16" style="vertical-align: middle;" /> New Tab Unlimited Bookmarks" extension!</p>
+            <h2 class="title">1. Readme</h2>
 
-            <blockquote>
-                This extension is for those who wants to be more productive with their Chrome "Start page" / "New tab".<br/>
-                It allows you to add <b>unlimited</b> bookmarks and <b>customize</b> them so that every time you open a new tab
-                you can instantly find your most commonly used links.
-            </blockquote>
+            <p>
+                New Tab Unlimited Bookmarks is a Chrome extension that helps you be more productive. <br>
+                It lets you add and customize an unlimited number of bookmarks, so your favorite links are instantly available every time you open a new tab.
+            </p>
+
+            <h2 class="title">2. Setup</h2>
 
             <p>You need to <b>configure</b> your bookmarks source first:<p>
             <ol>
-                <li>First, check your Bookmarks bar, locate a folder that you want to show on your Chrome's Start page. <br />(if not visible, press CTRL+SHIFT+B)</li>
-                <li>Second, create or choose an existing bookmark folder. <br />(eg. "development")</li>
-                <li>Press "Settings" button below and add the name of that folder from Step 2. Save settings.</li>
+                <li>Check your Bookmarks bar, locate a folder that you want to show on your Chrome's Start page.
+                    If not visible, press <code>CTRL + SHIFT + B</code> on Windows, <code>⌘ + SHIFT + B</code> on Mac.</li>
+                <li>Create or choose an existing bookmark folder. (eg. <code>development</code>)</li>
+                <li>Go to <a href="#" class="settings-link">&#9881; Settings</a> button below and add the name of that folder from Step 2. Save settings.</li>
             </ol>
 
-            <p>Enjoy!</p>
+            <h2 class="title">3. Enjoy!</h2>
+
+            <p>Now everytime you open a new tab, you will see your bookmarks from the folder that you picked on Step 2.
+            You can always configure this via Settings link which is located on the bottom center of the tab's content.</p>
         </div>
         <div id="bookmarks-search" style="display: none;">
             <form id="bookmarks-search-form">
@@ -49,7 +51,7 @@
 <!--                <div class="bookmark-link">Settings</div>-->
 <!--            </div>-->
         </div>
-        <div id="settings-link">&#9881; Settings</div>
+        <div><a id="settings-link" class="settings-link" href="#">&#9881; Settings</a></div>
         <dialog id="add-bookmark-dialog" class="dialog">
             <form method="dialog">
                     <h1 class="title">Add bookmark</h1>

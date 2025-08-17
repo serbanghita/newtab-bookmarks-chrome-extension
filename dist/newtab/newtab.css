@@ -1,6 +1,7 @@
 body {
     background-color: #eee;
-    padding: 1em;
+    padding: 2em;
+    font-size: 1em;
 }
 
 /******************************
@@ -12,6 +13,8 @@ body {
 
 .dialog {
     width: 60em;
+    padding: 2em;
+    font-size: 1em;
 }
 
 .dialog .title {
@@ -37,7 +40,7 @@ body {
 .dialog select,
 .dialog button {
     width: 100%;
-    min-width: 20em;
+    min-width: 10em;
     border: 2px solid #a7a7a7;
 }
 
@@ -72,10 +75,16 @@ body {
 #wrapper {
     margin: 0 auto;
     border: 1px solid #a7a7a7;
-    padding: 0.8em;
+    /*padding: 0.8em;*/
+    padding: 2em;
     border-radius: 1.2em;
     box-shadow: 3px 3px 2px 0 #eeeeee;
     background-color: white;
+}
+
+#wrapper code {
+    background-color: #eeeeee;
+    padding: 2px 4px;
 }
 
 #wrapper.bookmarkItemIcon--no .bookmark-icon {
@@ -119,7 +128,7 @@ body {
 
 #no-bookmarks-msg blockquote {
     color: #686868;
-    font-size: 1.2em;
+    font-size: 1em;
 }
 
 #no-bookmarks-msg .title {
@@ -127,10 +136,16 @@ body {
 }
 
 #settings-link {
-    text-decoration: underline;
-    cursor: pointer;
     display: block;
     text-align: center;
+}
+.settings-link {
+    text-decoration: underline;
+    cursor: pointer;
+}
+
+.settings-link:hover {
+    color: rebeccapurple;
 }
 
 
