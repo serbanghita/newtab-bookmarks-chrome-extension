@@ -1,6 +1,7 @@
-import {Settings} from "./Settings";
+import {BooleanSetting, Settings, SettingsProps, SizeSetting} from "./Settings";
 import {Bookmarks} from "./Bookmarks";
 import {$, $$q, faviconURL} from "./utils";
+import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode;
 
 export class View {
   constructor(private settings: Settings, private bookmarks: Bookmarks) {
@@ -8,10 +9,10 @@ export class View {
     this.bookmarks = bookmarks;
   }
 
-  renderBookmark(bookmark, size, isDraggable) {
+  renderBookmark(bookmark: BookmarkTreeNode, size: number, isDraggable: boolean) {
     const $bookmark = document.createElement("div");
     // Keep "id" for later sorting operations.
-    $bookmark.dataset.index = bookmark.index;
+    $bookmark.dataset.index = bookmark.index?.toString();
     $bookmark.dataset.id = bookmark.id;
     $bookmark.dataset.parentId = bookmark.parentId;
 
@@ -20,24 +21,32 @@ export class View {
     $bookmark.addEventListener("click", () => {
       $bookmark.classList.add("loading");
       setTimeout(() => {
-        window.location.href = bookmark.url;
+        window.location.href = bookmark.url || '';
       }, 0);
 
     });
 
     // Handle drag
     if (isDraggable) {
-      $bookmark.setAttribute("draggable", true);
-      $bookmark.addEventListener("drag", (e) => {
-        const selectedItem = e.target;
-        const list = selectedItem.parentNode;
+      $bookmark.setAttribute("draggable", "true");
+      $bookmark.addEventListener("drag", (e: DragEvent) => {
+        const selectedItem = e.target as HTMLElement;
+        if (!selectedItem) {
+          return;
+        }
+
         const x = e.clientX, y = e.clientY;
 
         selectedItem.classList.add('drag-sort-active');
-        let swapItem = document.elementFromPoint(x, y) === null ? selectedItem : document.elementFromPoint(x, y);
+        let swapItem = (document.elementFromPoint(x, y) === null ? selectedItem : document.elementFromPoint(x, y)) as HTMLElement;
+        const list = selectedItem.parentNode;
+
+        if (!swapItem || !list) {
+          return;
+        }
 
         if (swapItem !== selectedItem && list === swapItem.parentNode) {
-          swapItem = swapItem !== selectedItem.nextSibling ? swapItem : swapItem.nextSibling;
+          swapItem = swapItem !== selectedItem.nextSibling as HTMLElement ? swapItem : swapItem.nextSibling as HTMLElement;
           list.insertBefore(selectedItem, swapItem);
           selectedItem.dataset.indexSwap = swapItem.dataset.index;
           selectedItem.dataset.parentIdSwap = swapItem.dataset.parentId;
@@ -45,17 +54,18 @@ export class View {
         }
       });
       $bookmark.addEventListener("dragend", (e) => {
-        e.target.classList.remove('drag-sort-active');
+        const selectedItem = e.target as HTMLElement;
+        selectedItem.classList.remove('drag-sort-active');
         // Re-order in Chrome.
-        this.bookmarks.move(e.target.dataset.id, e.target.dataset.indexSwap, e.target.dataset.parentIdSwap);
-        delete e.target.dataset.indexSwap;
-        delete e.target.dataset.parentIdSwap;
+        this.bookmarks.move(selectedItem.dataset.id || '', selectedItem.dataset.indexSwap || '', selectedItem.dataset.parentIdSwap || '');
+        delete selectedItem.dataset.indexSwap;
+        delete selectedItem.dataset.parentIdSwap;
       });
     }
 
     // Img.
     const $bookmarkImg = document.createElement('img');
-    $bookmarkImg.src = faviconURL(bookmark.url, size);
+    $bookmarkImg.src = faviconURL(bookmark.url || '', size.toString());
     $bookmarkImg.className = "bookmark-icon";
 
     // Link.
@@ -118,7 +128,7 @@ export class View {
 
     // Set CSS settings to the main wrapper (so we can paint conditionally later with CSS).
     for (const settingName in this.settings.getAll()) {
-      $wrapper.classList.add(`${settingName}--${this.settings.getValue(settingName)}`);
+      $wrapper.classList.add(`${settingName}--${this.settings.getValue(settingName as keyof SettingsProps)}`);
     }
 
     // Render bookmarks items.
@@ -133,7 +143,7 @@ export class View {
 
       const size = this.settings.getValue("bookmarkItemSize") === "large" ? 32 : 16;
       const isDraggable = this.settings.getValue("bookmarksReordering");
-      const $bookmark = this.renderBookmark(bookmark, size, isDraggable);
+      const $bookmark = this.renderBookmark(bookmark, size, isDraggable === BooleanSetting.YES);
 
       $bookmarks.appendChild($bookmark);
     });
@@ -170,11 +180,11 @@ export class View {
       this.settings.save({
         rootFolderName: $<HTMLInputElement>("settings-root-folder").value,
         bookmarksWidth: $<HTMLInputElement>("settings-bookmarks-width").value,
-        bookmarkItemIcon: $<HTMLInputElement>("settings-bookmark-item-icon").value,
-        bookmarkItemSize: $<HTMLInputElement>("settings-bookmark-item-size").value,
-        bookmarksShowSubfolders: $<HTMLInputElement>("settings-show-subfolders").value,
-        bookmarksReordering: $<HTMLInputElement>("settings-bookmark-reorder").value,
-        bookmarksSearchBar: $<HTMLInputElement>("settings-bookmark-search-bar").value
+        bookmarkItemIcon: $<HTMLInputElement>("settings-bookmark-item-icon").value as BooleanSetting,
+        bookmarkItemSize: $<HTMLInputElement>("settings-bookmark-item-size").value as SizeSetting,
+        bookmarksShowSubfolders: $<HTMLInputElement>("settings-show-subfolders").value as BooleanSetting,
+        bookmarksReordering: $<HTMLInputElement>("settings-bookmark-reorder").value as BooleanSetting,
+        bookmarksSearchBar: $<HTMLInputElement>("settings-bookmark-search-bar").value as BooleanSetting,
       }).then(() => {
         $settingsDialog.close();
         window.location.reload();

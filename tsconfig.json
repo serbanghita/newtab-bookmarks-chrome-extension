@@ -2,28 +2,28 @@
   // Visit https://aka.ms/tsconfig to read more about this file
   "compilerOptions": {
     // File Layout
-     "rootDir": "./src",
-     "outDir": "./dist/js",
-
+    "rootDir": "./src",
+    "outDir": "./dist/js",
     // Environment Settings
     // See also https://aka.ms/tsconfig/module
-    "module": "CommonJS",
-    "target": "ESNext",
-    "types": ["@types/chrome"],
+    "module": "ESNext",
+    "moduleResolution": "node",
+    "target": "ES2016",
+    "types": [
+      "@types/chrome"
+    ],
     // For nodejs:
     // "lib": ["esnext"],
     // "types": ["node"],
     // and npm install -D @types/node
 
     // Other Outputs
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-
+    "sourceMap": false,
+    "declaration": false,
+    "declarationMap": false,
     // Stricter Typechecking Options
     "noUncheckedIndexedAccess": true,
     "exactOptionalPropertyTypes": true,
-
     // Style Options
     // "noImplicitReturns": true,
     // "noImplicitOverride": true,
@@ -34,11 +34,11 @@
 
     // Recommended Options
     "strict": true,
-//    "jsx": "react-jsx",
-//    "verbatimModuleSyntax": true,
+    //    "jsx": "react-jsx",
+    //    "verbatimModuleSyntax": true,
     "isolatedModules": true,
     "noUncheckedSideEffectImports": true,
     "moduleDetection": "force",
-    "skipLibCheck": true,
+    "skipLibCheck": true
   }
 }

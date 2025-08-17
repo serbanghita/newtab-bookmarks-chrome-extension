@@ -1,15 +1,15 @@
-enum BooleanSetting {
+export enum BooleanSetting {
   YES = "yes",
   NO = "no"
 }
 
-enum SizeSetting {
+export enum SizeSetting {
   SMALL = "small",
   MEDIUM = "medium",
   LARGE = "large",
 }
 
-type SettingsProps = {
+export type SettingsProps = {
   firstRun: boolean,
   rootFolderName: string,
   bookmarksWidth: string,

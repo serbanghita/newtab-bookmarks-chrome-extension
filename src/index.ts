@@ -21,18 +21,18 @@
 //     });
 // }
 
-import {Settings} from "../common/Settings";
-import {Bookmarks} from "../common/Bookmarks";
-import {View} from "../common/View";
+import {Settings} from "./Settings";
+import {Bookmarks} from "./Bookmarks";
+import {View} from "./View";
 
 /**
  * Bootstrap
  */
 (async () => {
-    const settings = await (new Settings()).init();
-    const bookmarks = await (new Bookmarks(settings)).init();
-    const view = new View(settings, bookmarks);
-    await view.render();
+  const settings = await (new Settings()).init();
+  const bookmarks = await (new Bookmarks(settings)).init();
+  const view = new View(settings, bookmarks);
+  await view.render();
 })();
 
 

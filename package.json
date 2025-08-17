@@ -4,6 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
+    "build": "esbuild ./src/index.ts --bundle --outfile=dist/js/newtab.js",
+    "dev": "esbuild ./src/index.ts --bundle --outfile=dist/js/newtab.js --sourcemap --watch",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Serban Ghita",
