@@ -5,8 +5,6 @@ import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode;
 
 export class View {
   constructor(private settings: Settings, private bookmarks: Bookmarks) {
-    this.settings = settings;
-    this.bookmarks = bookmarks;
   }
 
   renderBookmark(bookmark: BookmarkTreeNode, size: number, isDraggable: boolean) {

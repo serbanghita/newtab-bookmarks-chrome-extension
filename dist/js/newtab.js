@@ -160,8 +160,6 @@
     constructor(settings, bookmarks) {
       this.settings = settings;
       this.bookmarks = bookmarks;
-      this.settings = settings;
-      this.bookmarks = bookmarks;
     }
     renderBookmark(bookmark, size, isDraggable) {
       const $bookmark = document.createElement("div");
