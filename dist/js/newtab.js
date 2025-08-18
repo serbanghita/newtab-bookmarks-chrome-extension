@@ -272,7 +272,11 @@
         $noBookmarksMsg.style.display = "block";
         return;
       }
+      const bookmarksWidth = this.settings.getValue("bookmarksWidth");
       const showFolderNames = this.settings.getValue("bookmarksShowFolderName");
+      if (bookmarksWidth) {
+        $wrapper.classList.add(`bookmarksWidth--${bookmarksWidth}`);
+      }
       selectedBookmarksByFolder.forEach((item, index) => {
         const treeNodeChildren = item.node?.children;
         if (!treeNodeChildren) {
