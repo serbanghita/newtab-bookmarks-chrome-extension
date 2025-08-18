@@ -1,7 +1,14 @@
 import {Settings} from "./Settings";
+import {determineFolderNames} from "./utils";
+import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode;
+
+type SelectedBookmarkByFolder = {
+  folderName: string;
+  node: BookmarkTreeNode | null;
+};
 
 export class Bookmarks {
-  public bookmarks: chrome.bookmarks.BookmarkTreeNode[] = [];
+  public bookmarks: BookmarkTreeNode[] = [];
 
   constructor(public settings: Settings) {
     this.settings = settings;
@@ -28,16 +35,23 @@ export class Bookmarks {
     return await chrome.bookmarks.create({parentId, title});
   }
 
-  getStartPageBookmarks() {
-    const rootFolderName = this.settings.getValue("rootFolderName");
+  getSelectedBookmarksByFolder(): SelectedBookmarkByFolder[] | null {
     const rootBookmarkTreeNode = this.bookmarks[0];
     if (typeof rootBookmarkTreeNode === "undefined") {
       return null;
     }
-    return Bookmarks.getBookmarksFromFolder(rootFolderName, rootBookmarkTreeNode);
+
+    const rootFolders = determineFolderNames(this.settings.getValue("rootFolderName") || '');
+
+    return rootFolders.map(folderName => {
+      return {
+        folderName,
+        node: Bookmarks.getBookmarksFromFolder(folderName, rootBookmarkTreeNode)
+      }
+    });
   }
 
-  static getBookmarksFromFolder(folderName: string, treeItem: chrome.bookmarks.BookmarkTreeNode): chrome.bookmarks.BookmarkTreeNode | null {
+  static getBookmarksFromFolder(folderName: string, treeItem: BookmarkTreeNode): BookmarkTreeNode | null {
     // No folder name set OR folder name is empty.
     if (typeof folderName !== "string" || folderName.trim().length === 0) {
       return null;

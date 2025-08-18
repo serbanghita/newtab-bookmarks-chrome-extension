@@ -20,3 +20,14 @@ export function faviconURL(u: string, imgSize: string) {
   return url.toString();
 }
 
+export function determineFolderNames(foldersAsString: string) {
+  return foldersAsString.split(',').map((folderName) => folderName.trim());
+}
+
+export function truncateLongText(text: string) {
+  if (text.length > 100 && !text.includes(" ")) {
+    return text.substring(0, 60) + " ...";
+  }
+
+  return text;
+}

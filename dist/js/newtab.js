@@ -7,6 +7,8 @@
       this.settings = {
         firstRun: true,
         rootFolderName: "",
+        bookmarksShowFolderName: "no" /* NO */,
+        layout: "rows" /* ROWS */,
         bookmarksWidth: "full-screen",
         bookmarkItemIcon: "yes" /* YES */,
         bookmarkItemSize: "small" /* SMALL */,
@@ -55,6 +57,29 @@
     }
   };
 
+  // src/utils.ts
+  function $(id) {
+    return document.getElementById(id);
+  }
+  function $$q(cssSelector) {
+    return document.querySelectorAll(cssSelector);
+  }
+  function faviconURL(u, imgSize) {
+    const url = new URL(chrome.runtime.getURL("/_favicon/"));
+    url.searchParams.set("pageUrl", u);
+    url.searchParams.set("size", imgSize || "16");
+    return url.toString();
+  }
+  function determineFolderNames(foldersAsString) {
+    return foldersAsString.split(",").map((folderName) => folderName.trim());
+  }
+  function truncateLongText(text) {
+    if (text.length > 100 && !text.includes(" ")) {
+      return text.substring(0, 60) + " ...";
+    }
+    return text;
+  }
+
   // src/Bookmarks.ts
   var Bookmarks = class _Bookmarks {
     constructor(settings) {
@@ -78,13 +103,18 @@
     async addFolder(parentId, title) {
       return await chrome.bookmarks.create({ parentId, title });
     }
-    getStartPageBookmarks() {
-      const rootFolderName = this.settings.getValue("rootFolderName");
+    getSelectedBookmarksByFolder() {
       const rootBookmarkTreeNode = this.bookmarks[0];
       if (typeof rootBookmarkTreeNode === "undefined") {
         return null;
       }
-      return _Bookmarks.getBookmarksFromFolder(rootFolderName, rootBookmarkTreeNode);
+      const rootFolders = determineFolderNames(this.settings.getValue("rootFolderName") || "");
+      return rootFolders.map((folderName) => {
+        return {
+          folderName,
+          node: _Bookmarks.getBookmarksFromFolder(folderName, rootBookmarkTreeNode)
+        };
+      });
     }
     static getBookmarksFromFolder(folderName, treeItem) {
       if (typeof folderName !== "string" || folderName.trim().length === 0) {
@@ -141,20 +171,6 @@
     }
   };
 
-  // src/utils.ts
-  function $(id) {
-    return document.getElementById(id);
-  }
-  function $$q(cssSelector) {
-    return document.querySelectorAll(cssSelector);
-  }
-  function faviconURL(u, imgSize) {
-    const url = new URL(chrome.runtime.getURL("/_favicon/"));
-    url.searchParams.set("pageUrl", u);
-    url.searchParams.set("size", imgSize || "16");
-    return url.toString();
-  }
-
   // src/View.ts
   var View = class {
     constructor(settings, bookmarks) {
@@ -207,10 +223,11 @@
       $bookmarkImg.src = faviconURL(bookmark.url || "", size.toString());
       $bookmarkImg.className = "bookmark-icon";
       const $bookmarkLink = document.createElement("div");
-      $bookmarkLink.innerText = bookmark.title;
       $bookmarkLink.className = "bookmark-link";
+      const $bookmarkLinkText = document.createElement("span");
+      $bookmarkLinkText.innerText = truncateLongText(bookmark.title);
       $bookmark.appendChild($bookmarkImg);
-      $bookmark.appendChild($bookmarkLink);
+      $bookmark.appendChild($bookmarkLink).appendChild($bookmarkLinkText);
       return $bookmark;
     }
     async renderSearchBookmarks() {
@@ -218,6 +235,11 @@
       const $searchField = $("bookmarks-search-query");
       const $results = $("bookmarks-search-results");
       const $bookmarks = $("bookmarks");
+      if (this.settings.getValue("layout") === "columns" /* COLUMNS */) {
+        $bookmarks.classList.add("flex-container-even-columns");
+      } else {
+        $bookmarks.classList.add("flex-container-rows");
+      }
       $container.style.display = "block";
       $searchField.addEventListener("focusin", (e) => {
         e.target.setAttribute("placeholder", "");
@@ -244,33 +266,47 @@
     async renderStartPageBookmarks() {
       const $bookmarks = $("bookmarks");
       const $wrapper = $("wrapper");
-      const startPageBookmarks = this.bookmarks.getStartPageBookmarks();
-      if (this.settings.getValue("firstRun") || !startPageBookmarks) {
+      const selectedBookmarksByFolder = this.bookmarks.getSelectedBookmarksByFolder();
+      if (this.settings.getValue("firstRun") || !selectedBookmarksByFolder) {
         const $noBookmarksMsg = $("no-bookmarks-msg");
         $noBookmarksMsg.style.display = "block";
         return;
       }
-      for (const settingName in this.settings.getAll()) {
-        $wrapper.classList.add(`${settingName}--${this.settings.getValue(settingName)}`);
-      }
-      const treeNodeChildren = startPageBookmarks.children;
-      if (!treeNodeChildren) {
-        return;
-      }
-      treeNodeChildren.forEach((bookmark) => {
-        if (bookmark.children) {
+      const showFolderNames = this.settings.getValue("bookmarksShowFolderName");
+      selectedBookmarksByFolder.forEach((item, index) => {
+        const treeNodeChildren = item.node?.children;
+        if (!treeNodeChildren) {
           return;
         }
-        const size = this.settings.getValue("bookmarkItemSize") === "large" ? 32 : 16;
-        const isDraggable = this.settings.getValue("bookmarksReordering");
-        const $bookmark = this.renderBookmark(bookmark, size, isDraggable === "yes" /* YES */);
-        $bookmarks.appendChild($bookmark);
+        const $folder = document.createElement("div");
+        $folder.classList.add("bookmarks-folder");
+        if (showFolderNames === "yes" /* YES */) {
+          const $folderTitleContainer = document.createElement("div");
+          $folderTitleContainer.classList.add("bookmarks-folder-title");
+          $folderTitleContainer.innerText = item.folderName;
+          $folder.appendChild($folderTitleContainer);
+        }
+        const $folderBookMarksContainer = document.createElement("div");
+        $folderBookMarksContainer.classList.add("bookmarks-folder-bookmarks");
+        $folder.appendChild($folderBookMarksContainer);
+        treeNodeChildren.forEach((bookmark) => {
+          if (bookmark.children) {
+            return;
+          }
+          const size = this.settings.getValue("bookmarkItemSize") === "large" ? 32 : 16;
+          const isDraggable = this.settings.getValue("bookmarksReordering");
+          const $bookmark = this.renderBookmark(bookmark, size, isDraggable === "yes" /* YES */);
+          $folderBookMarksContainer.appendChild($bookmark);
+        });
+        $bookmarks.appendChild($folder);
       });
     }
     preRenderSettingsDialog() {
       const $settingsDialog = $("settings-dialog");
       const $settingsLinks = $$q(".settings-link");
       $("settings-root-folder").value = this.settings.getValue("rootFolderName");
+      $("settings-bookmark-show-folder-name").value = this.settings.getValue("bookmarksShowFolderName");
+      $("settings-layout").value = this.settings.getValue("layout");
       $("settings-bookmarks-width").value = this.settings.getValue("bookmarksWidth");
       $("settings-bookmark-item-icon").value = this.settings.getValue("bookmarkItemIcon");
       $("settings-bookmark-item-size").value = this.settings.getValue("bookmarkItemSize");
@@ -290,6 +326,8 @@
         e.stopPropagation();
         this.settings.save({
           rootFolderName: $("settings-root-folder").value,
+          bookmarksShowFolderName: $("settings-bookmark-show-folder-name").value,
+          layout: $("settings-layout").value,
           bookmarksWidth: $("settings-bookmarks-width").value,
           bookmarkItemIcon: $("settings-bookmark-item-icon").value,
           bookmarkItemSize: $("settings-bookmark-item-size").value,

@@ -1,0 +1,21 @@
+/******************************
+*                             *
+* CSS Flex container          *
+*                             *
+*******************************/
+
+.flex-container.flex-container-rows {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  /*justify-content: center;*/
+  align-content: flex-start;
+  gap: 1em;
+}
+
+.flex-container.flex-container-rows > div {
+  flex-grow: 0;
+  flex-shrink: 1;
+  flex-basis: auto;
+  align-self: flex-start;
+}
