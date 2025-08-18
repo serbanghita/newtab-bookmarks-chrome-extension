@@ -132,7 +132,12 @@ export class View {
       return;
     }
 
+    const bookmarksWidth = this.settings.getValue("bookmarksWidth");
     const showFolderNames = this.settings.getValue("bookmarksShowFolderName");
+
+    if (bookmarksWidth) {
+      $wrapper.classList.add(`bookmarksWidth--${bookmarksWidth}`);
+    }
 
     // Set CSS settings to the main wrapper (so we can paint conditionally later with CSS).
     // for (const settingName in this.settings.getAll()) {
