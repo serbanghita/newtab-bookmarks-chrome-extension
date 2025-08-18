@@ -1,6 +1,6 @@
-import {BooleanSetting, Settings, SettingsProps, SizeSetting} from "./Settings";
+import {BooleanSetting, LayoutSetting, Settings, SizeSetting} from "./Settings";
 import {Bookmarks} from "./Bookmarks";
-import {$, $$q, faviconURL} from "./utils";
+import {$, $$q, faviconURL, truncateLongText} from "./utils";
 import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode;
 
 export class View {
@@ -68,11 +68,13 @@ export class View {
 
     // Link.
     const $bookmarkLink = document.createElement("div");
-    $bookmarkLink.innerText = bookmark.title;
     $bookmarkLink.className = "bookmark-link";
 
+    const $bookmarkLinkText = document.createElement("span");
+    $bookmarkLinkText.innerText = truncateLongText(bookmark.title);
+
     $bookmark.appendChild($bookmarkImg);
-    $bookmark.appendChild($bookmarkLink);
+    $bookmark.appendChild($bookmarkLink).appendChild($bookmarkLinkText);
 
     return $bookmark;
   }
@@ -83,6 +85,12 @@ export class View {
     const $searchField = $("bookmarks-search-query");
     const $results = $("bookmarks-search-results");
     const $bookmarks = $("bookmarks");
+
+    if (this.settings.getValue("layout") === LayoutSetting.COLUMNS) {
+      $bookmarks.classList.add("flex-container-even-columns");
+    } else {
+      $bookmarks.classList.add("flex-container-rows");
+    }
 
     $container.style.display = 'block';
 
@@ -116,34 +124,58 @@ export class View {
   async renderStartPageBookmarks() {
     const $bookmarks = $("bookmarks");
     const $wrapper = $("wrapper");
-    const startPageBookmarks = this.bookmarks.getStartPageBookmarks();
+    const selectedBookmarksByFolder = this.bookmarks.getSelectedBookmarksByFolder();
 
-    if (this.settings.getValue("firstRun") || !startPageBookmarks) {
+    if (this.settings.getValue("firstRun") || !selectedBookmarksByFolder) {
       const $noBookmarksMsg = $("no-bookmarks-msg");
       $noBookmarksMsg.style.display = 'block';
       return;
     }
 
+    const showFolderNames = this.settings.getValue("bookmarksShowFolderName");
+
     // Set CSS settings to the main wrapper (so we can paint conditionally later with CSS).
-    for (const settingName in this.settings.getAll()) {
-      $wrapper.classList.add(`${settingName}--${this.settings.getValue(settingName as keyof SettingsProps)}`);
-    }
+    // for (const settingName in this.settings.getAll()) {
+    //   $wrapper.classList.add(`${settingName}--${this.settings.getValue(settingName as keyof SettingsProps)}`);
+    // }
 
     // Render bookmarks items.
-    const treeNodeChildren = startPageBookmarks.children;
-    if (!treeNodeChildren) {
-      return;
-    }
-    treeNodeChildren.forEach((bookmark) => {
-      if (bookmark.children) {
+    selectedBookmarksByFolder.forEach((item, index) => {
+      const treeNodeChildren = item.node?.children;
+      if (!treeNodeChildren) {
         return;
       }
 
-      const size = this.settings.getValue("bookmarkItemSize") === "large" ? 32 : 16;
-      const isDraggable = this.settings.getValue("bookmarksReordering");
-      const $bookmark = this.renderBookmark(bookmark, size, isDraggable === BooleanSetting.YES);
+      // Create the "folder" node that contains all bookmarks.
+      const $folder = document.createElement("div");
+      $folder.classList.add("bookmarks-folder");
 
-      $bookmarks.appendChild($bookmark);
+      if (showFolderNames === BooleanSetting.YES) {
+        const $folderTitleContainer = document.createElement("div");
+        $folderTitleContainer.classList.add("bookmarks-folder-title");
+        $folderTitleContainer.innerText = item.folderName;
+        $folder.appendChild($folderTitleContainer);
+      }
+
+      const $folderBookMarksContainer = document.createElement("div");
+      $folderBookMarksContainer.classList.add("bookmarks-folder-bookmarks");
+
+      $folder.appendChild($folderBookMarksContainer);
+
+      treeNodeChildren.forEach((bookmark) => {
+        // Subfolder, skip.
+        if (bookmark.children) {
+          return;
+        }
+
+        const size = this.settings.getValue("bookmarkItemSize") === "large" ? 32 : 16;
+        const isDraggable = this.settings.getValue("bookmarksReordering");
+        const $bookmark = this.renderBookmark(bookmark, size, isDraggable === BooleanSetting.YES);
+
+        $folderBookMarksContainer.appendChild($bookmark);
+      });
+
+      $bookmarks.appendChild($folder);
     });
   }
 
@@ -153,6 +185,8 @@ export class View {
 
     // Set form default values from Chrome's "storage".
     $<HTMLInputElement>("settings-root-folder").value = this.settings.getValue("rootFolderName");
+    $<HTMLInputElement>("settings-bookmark-show-folder-name").value = this.settings.getValue("bookmarksShowFolderName");
+    $<HTMLInputElement>("settings-layout").value = this.settings.getValue("layout");
     $<HTMLInputElement>("settings-bookmarks-width").value = this.settings.getValue("bookmarksWidth");
     $<HTMLInputElement>("settings-bookmark-item-icon").value = this.settings.getValue("bookmarkItemIcon");
     $<HTMLInputElement>("settings-bookmark-item-size").value = this.settings.getValue("bookmarkItemSize");
@@ -177,6 +211,8 @@ export class View {
 
       this.settings.save({
         rootFolderName: $<HTMLInputElement>("settings-root-folder").value,
+        bookmarksShowFolderName: $<HTMLInputElement>("settings-bookmark-show-folder-name").value as BooleanSetting,
+        layout: $<HTMLInputElement>("settings-layout").value as LayoutSetting,
         bookmarksWidth: $<HTMLInputElement>("settings-bookmarks-width").value,
         bookmarkItemIcon: $<HTMLInputElement>("settings-bookmark-item-icon").value as BooleanSetting,
         bookmarkItemSize: $<HTMLInputElement>("settings-bookmark-item-size").value as SizeSetting,

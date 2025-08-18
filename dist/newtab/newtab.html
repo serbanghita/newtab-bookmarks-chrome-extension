@@ -3,6 +3,8 @@
     <title>New tab</title>
     <meta charset="utf-8" />
     <link rel="stylesheet" href="../newtab/newtab.css" />
+    <link rel="stylesheet" href="../newtab/flex-container-even-columns.css" />
+    <link rel="stylesheet" href="../newtab/flex-container-rows.css" />
     <script src="../js/newtab.js"></script>
 </head>
 <body>
@@ -42,14 +44,7 @@
             </div>
         </div>
         <div id="bookmarks" class="flex-container">
-<!--            <div class="bookmark bookmark-util-item flex-item" id="add-bookmark-item">-->
-<!--&lt;!&ndash;                <div class="bookmark-icon">+</div>&ndash;&gt;-->
-<!--                <div class="bookmark-link">Add bookmark</div>-->
-<!--            </div>-->
-<!--            <div class="bookmark bookmark-util-item flex-item" id="settings-item">-->
-<!--&lt;!&ndash;                <div class="bookmark-icon">:::</div>&ndash;&gt;-->
-<!--                <div class="bookmark-link">Settings</div>-->
-<!--            </div>-->
+            <!-- bookmarks folders + bookmarks will be here -->
         </div>
         <div><a id="settings-link" class="settings-link" href="#">&#9881; Settings</a></div>
         <dialog id="add-bookmark-dialog" class="dialog">
@@ -77,11 +72,45 @@
 
                 <div class="field-group">
                     <div class="field-label">
-                        <label class="label" for="settings-root-folder">Bookmarks root folder:</label>
-                        <div class="field-label-info">Choose existing or new bookmark folder for your "Start page" bookmarks.</div>
+                        <label class="label" for="settings-root-folder">Folder(s):</label>
+                        <div class="field-label-info">
+                          Choose existing or new bookmark folder(s) for your "Start page" bookmarks.
+                          Can be only one folder or more separated by comma (,).
+                          e.g. <code>personal,work,random</code>
+                        </div>
                     </div>
-                    <div class="field-input"><input type="text" name="settings-root-folder" id="settings-root-folder" required autocomplete="off" spellcheck="false" /></div>
+                    <div class="field-input">
+                      <input type="text" name="settings-root-folder" id="settings-root-folder" required autocomplete="off" spellcheck="false" />
+                    </div>
                 </div>
+
+
+
+              <div class="field-group">
+                <div class="field-label">
+                  <label class="label" for="settings-bookmark-show-folder-name">Display folder name:</label>
+                  <div class="field-label-info">Display the folder name section and text.</div>
+                </div>
+                <div class="field-input">
+                  <select name="settings-bookmark-show-folder-name" id="settings-bookmark-show-folder-name">
+                    <option value="yes">yes</option>
+                    <option value="no">no</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="field-group">
+                <div class="field-label">
+                  <label class="label" for="settings-layout">Layout:</label>
+                  <div class="field-label-info">Layout of the bookmarks.</div>
+                </div>
+                <div class="field-input">
+                  <select name="settings-layout" id="settings-layout">
+                    <option value="rows">rows</option>
+                    <option value="columns">columns</option>
+                  </select>
+                </div>
+              </div>
 
                 <div class="field-group" style="display: none;">
                     <div class="field-label">
@@ -163,7 +192,7 @@
                     </div>
                 </div>
 
-                <div>
+                <div class="field-group">
                     <button id="settings-save-btn" title="Save settings">Save</button>
                 </div>
             </form>

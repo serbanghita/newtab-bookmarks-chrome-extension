@@ -1,0 +1,17 @@
+.flex-container.flex-container-even-columns {
+  display: flex;
+  justify-content: space-between;
+  align-items: stretch;
+  /* flex-flow: row nowrap; */
+  flex-direction: row;
+  flex-wrap: nowrap;
+  align-content: stretch;
+  gap: 5px;
+
+}
+
+.flex-container.flex-container-even-columns > div {
+  flex-grow:1;
+  flex-shrink:1;
+  flex-basis: 0;
+}

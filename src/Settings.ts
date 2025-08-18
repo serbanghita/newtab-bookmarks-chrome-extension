@@ -9,9 +9,16 @@ export enum SizeSetting {
   LARGE = "large",
 }
 
+export enum LayoutSetting {
+  ROWS = "rows",
+  COLUMNS = "columns",
+}
+
 export type SettingsProps = {
   firstRun: boolean,
   rootFolderName: string,
+  bookmarksShowFolderName: BooleanSetting,
+  layout: LayoutSetting,
   bookmarksWidth: string,
   bookmarkItemIcon: BooleanSetting,
   bookmarkItemSize: SizeSetting,
@@ -35,6 +42,8 @@ export class Settings {
     this.settings = {
       firstRun: true,
       rootFolderName: '',
+      bookmarksShowFolderName: BooleanSetting.NO,
+      layout: LayoutSetting.ROWS,
       bookmarksWidth: 'full-screen',
       bookmarkItemIcon: BooleanSetting.YES,
       bookmarkItemSize: SizeSetting.SMALL,

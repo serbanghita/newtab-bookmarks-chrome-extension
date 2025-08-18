@@ -22,13 +22,15 @@ body {
 }
 
 .dialog .field-group {
-    width: 100%;
-    clear: both;
-    margin-bottom: 1em;
-    display: inline-block;
+  width: 100%;
+  clear: both;
+  margin: 0 0;
+  padding: 0.5em 0;
+  display: inline-block;
+  border-top: 1px solid #ddd;
 }
 
-.dialog .field-label { width: 20em; padding-right: 1em; }
+.dialog .field-label, .dialog .field-input { width: 50%; }
 .dialog .field-label-info { color: #686868; }
 
 .dialog .field-input,
@@ -36,38 +38,24 @@ body {
     float: left;
 }
 
-.dialog input[type=text],
-.dialog select,
-.dialog button {
-    width: 100%;
-    min-width: 10em;
-    border: 2px solid #a7a7a7;
+.dialog input[type=text] {
+  width: 100%;
+  min-width: 10em;
+  border: 2px solid #a7a7a7;
+  cursor: hand;
+  padding: 1em;
+}
+
+.dialog select {
+  border: 2px solid #a7a7a7;
 }
 
 .dialog button {
-    cursor: hand;
-}
-
-/******************************
-*                             *
-* CSS Flex container          *
-*                             *
-*******************************/
-
-.flex-container {
-    display: flex;
-    flex-direction: row;
-    flex-wrap: wrap;
-    /*justify-content: center;*/
-    align-content: flex-start;
-    gap: 1em;
-}
-
-.flex-item {
-    flex-grow: 0;
-    flex-shrink: 1;
-    flex-basis: auto;
-    align-self: flex-start;
+  width: 100%;
+  min-width: 10em;
+  /*border: 2px solid #a7a7a7;*/
+  cursor: hand;
+  padding: 1em;
 }
 
 /***********************************/
@@ -164,6 +152,18 @@ body {
     filter: blur(4px);
 }
 
+.bookmarks-folder {
+
+}
+
+.bookmarks-folder-title {
+  padding: 1em 0.5em;
+}
+
+.bookmarks-folder-bookmarks {
+
+}
+
 .bookmark {
     /*min-width: 4em;*/
     /*max-width: 10em;*/
@@ -210,6 +210,13 @@ body {
 .bookmark-link {
     display: inline;
     color: rgb(0,0, 238);
+}
+
+.bookmark-link > span {
+  /*overflow: hidden;*/
+  /*text-overflow: ellipsis;*/
+  /*display: block;*/
+  /*width: 200px;*/
 }
 
 
