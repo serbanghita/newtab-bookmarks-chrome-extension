@@ -107,11 +107,16 @@ async function main() {
 
   // 5. Launch Chrome for Testing with extension auto-loaded
   console.log("[preview] Launching Chrome for Testing...");
-  const chrome = spawn(
-    executablePath,
-    [`--load-extension=${ROOT}`, `--user-data-dir=${PROFILE_DIR}`, "--no-first-run", "--no-default-browser-check", "chrome://newtab"],
-    { stdio: "inherit" },
-  );
+  const chromeArgs = [
+    `--load-extension=${ROOT}`,
+    `--user-data-dir=${PROFILE_DIR}`,
+    "--no-first-run",
+    "--no-default-browser-check",
+  ];
+  // Ubuntu 23.10+ restricts unprivileged user namespaces via AppArmor, breaking Chrome's sandbox.
+  if (process.platform === "linux") chromeArgs.push("--no-sandbox");
+  chromeArgs.push("chrome://newtab");
+  const chrome = spawn(executablePath, chromeArgs, { stdio: "inherit" });
 
   // 6. Cleanup on exit
   const cleanup = () => {
