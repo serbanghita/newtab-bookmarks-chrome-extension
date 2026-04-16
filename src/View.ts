@@ -105,7 +105,7 @@ export class View {
       const query = (e.target as HTMLInputElement).value.trim();
       const bookmarksFound = this.bookmarks.search(query);
 
-      $results.innerHTML = '';
+      $results.replaceChildren();
       $bookmarks.classList.remove("blur");
 
       if (bookmarksFound && bookmarksFound.length > 0) {
