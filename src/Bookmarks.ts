@@ -42,15 +42,21 @@ export class Bookmarks {
     }
 
     const rootFolders = determineFolderNames(this.settings.getValue("rootFolderName") || '');
-    const folderMap = Bookmarks.getBookmarksFromFolders(new Set(rootFolders), rootBookmarkTreeNode);
+    const validFolders = rootFolders.filter(name => name.length > 0);
+    if (validFolders.length === 0) {
+      return null;
+    }
+    const folderMap = Bookmarks.getBookmarksFromFolders(new Set(validFolders), rootBookmarkTreeNode);
 
-    return rootFolders.map(folderName => ({
+    return validFolders.map(folderName => ({
       folderName,
       node: folderMap.get(folderName) || null
     }));
   }
 
   static getBookmarksFromFolders(folderNames: Set<string>, treeItem: BookmarkTreeNode): Map<string, BookmarkTreeNode> {
+    if (folderNames.size === 0) return new Map();
+
     const results = new Map<string, BookmarkTreeNode>();
 
     function traverse(node: BookmarkTreeNode) {
