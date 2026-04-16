@@ -89,10 +89,10 @@ export class Settings {
   }
 
   async save(newSettings?: Partial<SettingsProps>) {
-    if (newSettings) {
-      await chrome.storage.local.set({[Settings.SETTINGS_ROOT_KEY]: {...this.settings, ...newSettings, ...{firstRun: false}}});
-    } else {
-      await chrome.storage.local.set({[Settings.SETTINGS_ROOT_KEY]: {...this.settings}});
-    }
+    const settingsToSave = newSettings
+        ? {...this.settings, ...newSettings, firstRun: false}
+        : {...this.settings, firstRun: false};
+    await chrome.storage.local.set({[Settings.SETTINGS_ROOT_KEY]: settingsToSave});
+    this.settings = settingsToSave;
   }
 }
