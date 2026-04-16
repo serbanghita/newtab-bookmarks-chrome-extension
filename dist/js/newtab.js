@@ -14,7 +14,8 @@
         bookmarkItemSize: "small" /* SMALL */,
         bookmarksShowSubfolders: "no" /* NO */,
         bookmarksReordering: "yes" /* YES */,
-        bookmarksSearchBar: "yes" /* YES */
+        bookmarksSearchBar: "yes" /* YES */,
+        theme: "default" /* DEFAULT */
       };
     }
     static {
@@ -49,11 +50,9 @@
       return this.settings;
     }
     async save(newSettings) {
-      if (newSettings) {
-        await chrome.storage.local.set({ [_Settings.SETTINGS_ROOT_KEY]: { ...this.settings, ...newSettings, ...{ firstRun: false } } });
-      } else {
-        await chrome.storage.local.set({ [_Settings.SETTINGS_ROOT_KEY]: { ...this.settings } });
-      }
+      const settingsToSave = newSettings ? { ...this.settings, ...newSettings, firstRun: false } : { ...this.settings, firstRun: false };
+      await chrome.storage.local.set({ [_Settings.SETTINGS_ROOT_KEY]: settingsToSave });
+      this.settings = settingsToSave;
     }
   };
 
@@ -71,7 +70,7 @@
     return url.toString();
   }
   function determineFolderNames(foldersAsString) {
-    return foldersAsString.split(",").map((folderName) => folderName.trim());
+    return foldersAsString.split(",").map((folderName) => folderName.trim()).filter(Boolean);
   }
   function truncateLongText(text) {
     if (text.length > 100 && !text.includes(" ")) {
@@ -109,12 +108,33 @@
         return null;
       }
       const rootFolders = determineFolderNames(this.settings.getValue("rootFolderName") || "");
-      return rootFolders.map((folderName) => {
-        return {
-          folderName,
-          node: _Bookmarks.getBookmarksFromFolder(folderName, rootBookmarkTreeNode)
-        };
-      });
+      const validFolders = rootFolders.filter((name) => name.length > 0);
+      if (validFolders.length === 0) {
+        return null;
+      }
+      const folderMap = _Bookmarks.getBookmarksFromFolders(new Set(validFolders), rootBookmarkTreeNode);
+      return validFolders.map((folderName) => ({
+        folderName,
+        node: folderMap.get(folderName) || null
+      }));
+    }
+    static getBookmarksFromFolders(folderNames, treeItem) {
+      if (folderNames.size === 0) return /* @__PURE__ */ new Map();
+      const results = /* @__PURE__ */ new Map();
+      function traverse(node) {
+        if (folderNames.has(node.title) && !results.has(node.title)) {
+          results.set(node.title, node);
+          if (results.size === folderNames.size) return;
+        }
+        if (node.children) {
+          for (const child of node.children) {
+            traverse(child);
+            if (results.size === folderNames.size) return;
+          }
+        }
+      }
+      traverse(treeItem);
+      return results;
     }
     static getBookmarksFromFolder(folderName, treeItem) {
       if (typeof folderName !== "string" || folderName.trim().length === 0) {
@@ -144,7 +164,7 @@
       if (typeof query !== "string" || query.trim().length < 3) {
         return results;
       }
-      if (treeItem.title.toLowerCase().search(query.toLowerCase()) !== -1) {
+      if (treeItem.url && treeItem.title.toLowerCase().includes(query.toLowerCase())) {
         results.push(treeItem);
       }
       const childTreeNodes = treeItem.children;
@@ -192,31 +212,56 @@
       });
       if (isDraggable) {
         $bookmark.setAttribute("draggable", "true");
+        let animationFrame = 0;
         $bookmark.addEventListener("drag", (e) => {
-          const selectedItem = e.target;
-          if (!selectedItem) {
-            return;
-          }
-          const x = e.clientX, y = e.clientY;
-          selectedItem.classList.add("drag-sort-active");
-          let swapItem = document.elementFromPoint(x, y) === null ? selectedItem : document.elementFromPoint(x, y);
-          const list = selectedItem.parentNode;
-          if (!swapItem || !list) {
-            return;
-          }
-          if (swapItem !== selectedItem && list === swapItem.parentNode) {
-            swapItem = swapItem !== selectedItem.nextSibling ? swapItem : swapItem.nextSibling;
-            list.insertBefore(selectedItem, swapItem);
-            selectedItem.dataset.indexSwap = swapItem.dataset.index;
-            selectedItem.dataset.parentIdSwap = swapItem.dataset.parentId;
-          }
+          if (animationFrame) return;
+          animationFrame = requestAnimationFrame(() => {
+            animationFrame = 0;
+            const selectedItem = e.target;
+            if (!selectedItem) {
+              return;
+            }
+            const x = e.clientX, y = e.clientY;
+            selectedItem.classList.add("drag-sort-active");
+            const rawElement = document.elementFromPoint(x, y);
+            if (!rawElement) return;
+            let swapItem = rawElement.closest(".bookmark");
+            if (!swapItem) return;
+            const list = selectedItem.parentNode;
+            if (!list) {
+              return;
+            }
+            if (swapItem !== selectedItem && list === swapItem.parentNode) {
+              swapItem = swapItem !== selectedItem.nextSibling ? swapItem : swapItem.nextSibling;
+              list.insertBefore(selectedItem, swapItem);
+              selectedItem.dataset.indexSwap = swapItem.dataset.index;
+              selectedItem.dataset.parentIdSwap = swapItem.dataset.parentId;
+            }
+          });
         });
-        $bookmark.addEventListener("dragend", (e) => {
+        $bookmark.addEventListener("dragend", async (e) => {
+          if (animationFrame) {
+            cancelAnimationFrame(animationFrame);
+            animationFrame = 0;
+          }
           const selectedItem = e.target;
           selectedItem.classList.remove("drag-sort-active");
-          this.bookmarks.move(selectedItem.dataset.id || "", selectedItem.dataset.indexSwap || "", selectedItem.dataset.parentIdSwap || "");
-          delete selectedItem.dataset.indexSwap;
-          delete selectedItem.dataset.parentIdSwap;
+          if (selectedItem.dataset.indexSwap) {
+            try {
+              await this.bookmarks.move(selectedItem.dataset.id || "", selectedItem.dataset.indexSwap, selectedItem.dataset.parentIdSwap || "");
+            } catch (err) {
+              console.warn("Failed to reorder bookmark:", err);
+            } finally {
+              const parent = selectedItem.parentNode;
+              if (parent) {
+                parent.querySelectorAll(".bookmark").forEach((el, i) => {
+                  el.dataset.index = i.toString();
+                });
+              }
+              delete selectedItem.dataset.indexSwap;
+              delete selectedItem.dataset.parentIdSwap;
+            }
+          }
         });
       }
       const $bookmarkImg = document.createElement("img");
@@ -247,20 +292,28 @@
       $searchField.addEventListener("focusout", (e) => {
         e.target.setAttribute("placeholder", "Search my bookmarks ...");
       });
+      let debounceTimer = 0;
       $searchField.addEventListener("input", (e) => {
-        const query = e.target.value.trim();
-        const bookmarksFound = this.bookmarks.search(query);
-        $results.innerHTML = "";
+        clearTimeout(debounceTimer);
+        $results.replaceChildren();
+        $results.style.display = "none";
         $bookmarks.classList.remove("blur");
-        if (bookmarksFound && bookmarksFound.length > 0) {
-          bookmarksFound.forEach((bookmark) => {
-            const size = this.settings.getValue("bookmarkItemSize") === "large" ? 32 : 16;
-            const $bookmark = this.renderBookmark(bookmark, size, false);
-            $results.appendChild($bookmark);
-          });
-          $results.style.display = "block";
-          $bookmarks.classList.add("blur");
-        }
+        debounceTimer = window.setTimeout(() => {
+          const query = e.target.value.trim();
+          if (!query) {
+            return;
+          }
+          const bookmarksFound = this.bookmarks.search(query);
+          if (bookmarksFound && bookmarksFound.length > 0) {
+            bookmarksFound.forEach((bookmark) => {
+              const size = this.settings.getValue("bookmarkItemSize") === "large" ? 32 : 16;
+              const $bookmark = this.renderBookmark(bookmark, size, false);
+              $results.appendChild($bookmark);
+            });
+            $results.style.display = "block";
+            $bookmarks.classList.add("blur");
+          }
+        }, 200);
       });
     }
     async renderStartPageBookmarks() {
@@ -317,6 +370,7 @@
       $("settings-show-subfolders").value = this.settings.getValue("bookmarksShowSubfolders");
       $("settings-bookmark-reorder").value = this.settings.getValue("bookmarksReordering");
       $("settings-bookmark-search-bar").value = this.settings.getValue("bookmarksSearchBar");
+      $("settings-theme").value = this.settings.getValue("theme");
       $settingsLinks.forEach(($settingsLink) => {
         $settingsLink.addEventListener("click", (e) => {
           e.preventDefault();
@@ -337,7 +391,8 @@
           bookmarkItemSize: $("settings-bookmark-item-size").value,
           bookmarksShowSubfolders: $("settings-show-subfolders").value,
           bookmarksReordering: $("settings-bookmark-reorder").value,
-          bookmarksSearchBar: $("settings-bookmark-search-bar").value
+          bookmarksSearchBar: $("settings-bookmark-search-bar").value,
+          theme: $("settings-theme").value
         }).then(() => {
           $settingsDialog.close();
           window.location.reload();
@@ -348,6 +403,10 @@
     //     $("bookmarks-settings-debug").innerHTML = JSON.stringify(this.settings, null, 2);
     // }
     async render() {
+      const theme = this.settings.getValue("theme");
+      if (theme && theme !== "default" /* DEFAULT */) {
+        document.body.classList.add(`theme--${theme}`);
+      }
       if (!this.settings.getValue("firstRun") && this.settings.getValue("bookmarksSearchBar") === "yes") {
         await this.renderSearchBookmarks();
       }

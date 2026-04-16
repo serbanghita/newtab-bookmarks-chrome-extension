@@ -1,4 +1,4 @@
-import {BooleanSetting, LayoutSetting, Settings, SizeSetting} from "./Settings";
+import {BooleanSetting, LayoutSetting, Settings, SizeSetting, ThemeSetting} from "./Settings";
 import {Bookmarks} from "./Bookmarks";
 import {$, $$q, faviconURL, truncateLongText} from "./utils";
 import BookmarkTreeNode = chrome.bookmarks.BookmarkTreeNode;
@@ -232,6 +232,7 @@ export class View {
     $<HTMLInputElement>("settings-show-subfolders").value = this.settings.getValue("bookmarksShowSubfolders");
     $<HTMLInputElement>("settings-bookmark-reorder").value = this.settings.getValue("bookmarksReordering");
     $<HTMLInputElement>("settings-bookmark-search-bar").value = this.settings.getValue("bookmarksSearchBar");
+    $<HTMLInputElement>("settings-theme").value = this.settings.getValue("theme");
 
     $settingsLinks.forEach(($settingsLink) => {
       $settingsLink.addEventListener("click", (e) => {
@@ -258,6 +259,7 @@ export class View {
         bookmarksShowSubfolders: $<HTMLInputElement>("settings-show-subfolders").value as BooleanSetting,
         bookmarksReordering: $<HTMLInputElement>("settings-bookmark-reorder").value as BooleanSetting,
         bookmarksSearchBar: $<HTMLInputElement>("settings-bookmark-search-bar").value as BooleanSetting,
+        theme: $<HTMLInputElement>("settings-theme").value as ThemeSetting,
       }).then(() => {
         $settingsDialog.close();
         window.location.reload();
@@ -270,6 +272,12 @@ export class View {
   // }
 
   async render() {
+    // Apply theme.
+    const theme = this.settings.getValue("theme");
+    if (theme && theme !== ThemeSetting.DEFAULT) {
+      document.body.classList.add(`theme--${theme}`);
+    }
+
     // Bookmarks search bar.
     if (
       !this.settings.getValue("firstRun") &&

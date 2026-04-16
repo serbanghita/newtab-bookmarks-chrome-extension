@@ -1,0 +1,190 @@
+/*
+ * Windows 98 theme
+ * Classic 3D borders, system colors, pixel aesthetic.
+ */
+
+body.theme--win98 {
+  background-color: #008080;
+  padding: 2em;
+  font-family: "MS Sans Serif", "Microsoft Sans Serif", Tahoma, Geneva, sans-serif;
+  font-size: 13px;
+}
+
+body.theme--win98 #wrapper {
+  background-color: #c0c0c0;
+  border: none;
+  border-radius: 0;
+  box-shadow: none;
+  border-top: 2px solid #fff;
+  border-left: 2px solid #fff;
+  border-right: 2px solid #404040;
+  border-bottom: 2px solid #404040;
+  padding: 2px;
+}
+
+body.theme--win98 #wrapper code {
+  background-color: #fff;
+  border: 1px solid #808080;
+  font-family: "Fixedsys", "Courier New", monospace;
+}
+
+/* Title bar effect for folder titles */
+body.theme--win98 .bookmarks-folder-title {
+  background: linear-gradient(90deg, #000080, #1084d0);
+  color: #fff;
+  font-weight: bold;
+  font-size: 13px;
+  padding: 3px 4px;
+  margin: 2px;
+}
+
+body.theme--win98 .bookmarks-folder-bookmarks {
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  background-color: #fff;
+  margin: 2px;
+  padding: 4px;
+}
+
+body.theme--win98 .bookmark {
+  font-family: "MS Sans Serif", "Microsoft Sans Serif", Tahoma, Geneva, sans-serif;
+  font-size: 13px;
+  line-height: 1.4em;
+  border-bottom: none;
+  padding: 2px 4px;
+}
+
+body.theme--win98 .bookmark:hover {
+  background-color: #000080;
+  border-bottom: none;
+  cursor: pointer;
+}
+
+body.theme--win98 .bookmark:hover .bookmark-link {
+  color: #fff;
+}
+
+body.theme--win98 .bookmark-link {
+  color: #000080;
+  font-family: "MS Sans Serif", "Microsoft Sans Serif", Tahoma, Geneva, sans-serif;
+}
+
+body.theme--win98 .bookmark.drag-sort-active {
+  border: 1px dotted #000;
+}
+
+body.theme--win98 .bookmark-icon {
+  image-rendering: pixelated;
+}
+
+body.theme--win98 #settings-link {
+  font-size: 13px;
+  padding: 2px;
+}
+
+body.theme--win98 .settings-link {
+  color: #000080;
+}
+
+body.theme--win98 .settings-link:hover {
+  color: #000080;
+}
+
+body.theme--win98 #bookmarks-search {
+  border-bottom: 1px solid #808080;
+  margin-bottom: 4px;
+}
+
+body.theme--win98 #bookmarks-search-query {
+  font-family: "MS Sans Serif", "Microsoft Sans Serif", Tahoma, Geneva, sans-serif;
+  font-size: 13px;
+  border-radius: 0;
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  background-color: #fff;
+  padding: 3px;
+}
+
+body.theme--win98 #bookmarks-search-results {
+  background-color: #fff;
+  border: 1px solid #808080;
+}
+
+body.theme--win98 #no-bookmarks-msg {
+  font-family: "MS Sans Serif", "Microsoft Sans Serif", Tahoma, Geneva, sans-serif;
+  font-size: 13px;
+  line-height: 1.6em;
+}
+
+body.theme--win98 .dialog {
+  background-color: #c0c0c0;
+  border-radius: 0;
+  border-top: 2px solid #fff;
+  border-left: 2px solid #fff;
+  border-right: 2px solid #404040;
+  border-bottom: 2px solid #404040;
+}
+
+body.theme--win98 .dialog .title {
+  background: linear-gradient(90deg, #000080, #1084d0);
+  color: #fff;
+  font-size: 13px;
+  font-weight: bold;
+  padding: 3px 4px;
+  margin: 0 0 8px 0;
+}
+
+body.theme--win98 .dialog .field-group {
+  border-top: 1px solid #808080;
+  font-size: 13px;
+}
+
+body.theme--win98 .dialog .field-label-info {
+  color: #404040;
+  font-size: 12px;
+}
+
+body.theme--win98 .dialog input[type=text] {
+  border-radius: 0;
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  font-family: "MS Sans Serif", "Microsoft Sans Serif", Tahoma, Geneva, sans-serif;
+  font-size: 13px;
+  padding: 3px;
+}
+
+body.theme--win98 .dialog select {
+  border-radius: 0;
+  border-top: 1px solid #808080;
+  border-left: 1px solid #808080;
+  border-right: 1px solid #fff;
+  border-bottom: 1px solid #fff;
+  font-family: "MS Sans Serif", "Microsoft Sans Serif", Tahoma, Geneva, sans-serif;
+  font-size: 13px;
+  background-color: #fff;
+}
+
+body.theme--win98 .dialog button {
+  background-color: #c0c0c0;
+  border-top: 2px solid #fff;
+  border-left: 2px solid #fff;
+  border-right: 2px solid #404040;
+  border-bottom: 2px solid #404040;
+  font-family: "MS Sans Serif", "Microsoft Sans Serif", Tahoma, Geneva, sans-serif;
+  font-size: 13px;
+  padding: 4px 12px;
+  cursor: pointer;
+}
+
+body.theme--win98 .dialog button:active {
+  border-top: 2px solid #404040;
+  border-left: 2px solid #404040;
+  border-right: 2px solid #fff;
+  border-bottom: 2px solid #fff;
+}

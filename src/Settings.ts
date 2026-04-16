@@ -14,6 +14,13 @@ export enum LayoutSetting {
   COLUMNS = "columns",
 }
 
+export enum ThemeSetting {
+  DEFAULT = "default",
+  BRUTALIST = "brutalist",
+  IOS = "ios",
+  WIN98 = "win98",
+}
+
 export type SettingsProps = {
   firstRun: boolean,
   rootFolderName: string,
@@ -24,7 +31,8 @@ export type SettingsProps = {
   bookmarkItemSize: SizeSetting,
   bookmarksShowSubfolders: BooleanSetting,
   bookmarksReordering: BooleanSetting,
-  bookmarksSearchBar: BooleanSetting
+  bookmarksSearchBar: BooleanSetting,
+  theme: ThemeSetting
   // [key: string]: boolean | string | BooleanSetting
 }
 
@@ -49,7 +57,8 @@ export class Settings {
       bookmarkItemSize: SizeSetting.SMALL,
       bookmarksShowSubfolders: BooleanSetting.NO,
       bookmarksReordering: BooleanSetting.YES,
-      bookmarksSearchBar: BooleanSetting.YES
+      bookmarksSearchBar: BooleanSetting.YES,
+      theme: ThemeSetting.DEFAULT
     };
   }
 

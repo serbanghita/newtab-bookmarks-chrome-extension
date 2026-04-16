@@ -1,0 +1,139 @@
+/*
+ * iOS Glass theme
+ * Frosted glass, translucent layers, soft shapes.
+ */
+
+body.theme--ios {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 50%, #f093fb 100%);
+  background-attachment: fixed;
+  padding: 2em;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body.theme--ios #wrapper {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 1.6em;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+  padding: 2em;
+}
+
+body.theme--ios #wrapper code {
+  background-color: rgba(255, 255, 255, 0.3);
+  border-radius: 4px;
+}
+
+body.theme--ios .bookmarks-folder-title {
+  color: rgba(255, 255, 255, 0.9);
+  font-weight: 600;
+  font-size: 0.85em;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  padding: 0.8em 0.5em;
+}
+
+body.theme--ios .bookmark {
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+  border-bottom: 2px solid transparent;
+  border-radius: 0.6em;
+  transition: background-color 0.15s ease;
+}
+
+body.theme--ios .bookmark:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+  border-bottom: 2px solid transparent;
+}
+
+body.theme--ios .bookmark-link {
+  color: #fff;
+}
+
+body.theme--ios .bookmark.drag-sort-active {
+  border: 2px solid rgba(255, 255, 255, 0.6);
+}
+
+body.theme--ios #settings-link {
+  font-weight: 500;
+}
+
+body.theme--ios .settings-link {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+body.theme--ios .settings-link:hover {
+  color: #fff;
+}
+
+body.theme--ios #bookmarks-search {
+  border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+body.theme--ios #bookmarks-search-query {
+  background: rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.3);
+  border-radius: 1.2em;
+  color: #fff;
+  caret-color: #fff;
+  font-family: -apple-system, BlinkMacSystemFont, "SF Pro Text", "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+body.theme--ios #bookmarks-search-query::placeholder {
+  color: rgba(255, 255, 255, 0.5);
+}
+
+body.theme--ios #bookmarks-search-results {
+  background: rgba(255, 255, 255, 0.25);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border-radius: 0.8em;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+}
+
+body.theme--ios .bookmark-icon {
+  border-radius: 4px;
+}
+
+body.theme--ios #no-bookmarks-msg {
+  color: #fff;
+}
+
+body.theme--ios #no-bookmarks-msg blockquote {
+  color: rgba(255, 255, 255, 0.7);
+}
+
+body.theme--ios .dialog {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-radius: 1.2em;
+}
+
+body.theme--ios .dialog .field-group {
+  border-top: 1px solid rgba(0, 0, 0, 0.08);
+}
+
+body.theme--ios .dialog input[type=text] {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.5em;
+}
+
+body.theme--ios .dialog select {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 0.5em;
+}
+
+body.theme--ios .dialog button {
+  background: #007aff;
+  color: #fff;
+  border: none;
+  border-radius: 0.6em;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+body.theme--ios .dialog button:hover {
+  background: #0066d6;
+}
