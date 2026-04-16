@@ -42,13 +42,32 @@ export class Bookmarks {
     }
 
     const rootFolders = determineFolderNames(this.settings.getValue("rootFolderName") || '');
+    const folderMap = Bookmarks.getBookmarksFromFolders(new Set(rootFolders), rootBookmarkTreeNode);
 
-    return rootFolders.map(folderName => {
-      return {
-        folderName,
-        node: Bookmarks.getBookmarksFromFolder(folderName, rootBookmarkTreeNode)
+    return rootFolders.map(folderName => ({
+      folderName,
+      node: folderMap.get(folderName) || null
+    }));
+  }
+
+  static getBookmarksFromFolders(folderNames: Set<string>, treeItem: BookmarkTreeNode): Map<string, BookmarkTreeNode> {
+    const results = new Map<string, BookmarkTreeNode>();
+
+    function traverse(node: BookmarkTreeNode) {
+      if (folderNames.has(node.title) && !results.has(node.title)) {
+        results.set(node.title, node);
+        if (results.size === folderNames.size) return;
       }
-    });
+      if (node.children) {
+        for (const child of node.children) {
+          traverse(child);
+          if (results.size === folderNames.size) return;
+        }
+      }
+    }
+
+    traverse(treeItem);
+    return results;
   }
 
   static getBookmarksFromFolder(folderName: string, treeItem: BookmarkTreeNode): BookmarkTreeNode | null {
