@@ -60,6 +60,9 @@ export class View {
         if (selectedItem.dataset.indexSwap) {
           try {
             await this.bookmarks.move(selectedItem.dataset.id || '', selectedItem.dataset.indexSwap, selectedItem.dataset.parentIdSwap || '');
+          } catch (err) {
+            console.warn('Failed to reorder bookmark:', err);
+          } finally {
             // Recompute indices from current DOM order
             const parent = selectedItem.parentNode;
             if (parent) {
@@ -67,11 +70,9 @@ export class View {
                 (el as HTMLElement).dataset.index = i.toString();
               });
             }
-          } catch (err) {
-            console.warn('Failed to reorder bookmark:', err);
+            delete selectedItem.dataset.indexSwap;
+            delete selectedItem.dataset.parentIdSwap;
           }
-          delete selectedItem.dataset.indexSwap;
-          delete selectedItem.dataset.parentIdSwap;
         }
       });
     }
