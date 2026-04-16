@@ -179,6 +179,8 @@ body {
     font-size:1.2em;
     border-bottom: 2px solid transparent;
     text-align: left;
+    text-decoration: none;
+    color: inherit;
 }
 
 .bookmark.drag-sort-active {

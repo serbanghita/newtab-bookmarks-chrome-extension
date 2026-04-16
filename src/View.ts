@@ -8,7 +8,8 @@ export class View {
   }
 
   renderBookmark(bookmark: BookmarkTreeNode, size: number, isDraggable: boolean) {
-    const $bookmark = document.createElement("div");
+    const $bookmark = document.createElement("a");
+    $bookmark.href = bookmark.url || "";
     // Keep "id" for later sorting operations.
     $bookmark.dataset.index = bookmark.index?.toString();
     $bookmark.dataset.id = bookmark.id;
@@ -16,12 +17,9 @@ export class View {
 
     $bookmark.classList.add("bookmark");
     $bookmark.classList.add("flex-item");
-    $bookmark.addEventListener("click", () => {
+    $bookmark.addEventListener("click", (e) => {
+      if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey) return;
       $bookmark.classList.add("loading");
-      setTimeout(() => {
-        window.location.href = bookmark.url || '';
-      }, 0);
-
     });
 
     // Handle drag

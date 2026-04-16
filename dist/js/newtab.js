@@ -198,17 +198,16 @@
       this.bookmarks = bookmarks;
     }
     renderBookmark(bookmark, size, isDraggable) {
-      const $bookmark = document.createElement("div");
+      const $bookmark = document.createElement("a");
+      $bookmark.href = bookmark.url || "";
       $bookmark.dataset.index = bookmark.index?.toString();
       $bookmark.dataset.id = bookmark.id;
       $bookmark.dataset.parentId = bookmark.parentId;
       $bookmark.classList.add("bookmark");
       $bookmark.classList.add("flex-item");
-      $bookmark.addEventListener("click", () => {
+      $bookmark.addEventListener("click", (e) => {
+        if (e.button !== 0 || e.ctrlKey || e.metaKey || e.shiftKey) return;
         $bookmark.classList.add("loading");
-        setTimeout(() => {
-          window.location.href = bookmark.url || "";
-        }, 0);
       });
       if (isDraggable) {
         $bookmark.setAttribute("draggable", "true");
@@ -423,4 +422,3 @@
     await view.render();
   })();
 })();
-//# sourceMappingURL=newtab.js.map
