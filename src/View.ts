@@ -36,10 +36,13 @@ export class View {
         const x = e.clientX, y = e.clientY;
 
         selectedItem.classList.add('drag-sort-active');
-        let swapItem = (document.elementFromPoint(x, y) === null ? selectedItem : document.elementFromPoint(x, y)) as HTMLElement;
+        const rawElement = document.elementFromPoint(x, y);
+        if (!rawElement) return;
+        let swapItem = rawElement.closest('.bookmark') as HTMLElement;
+        if (!swapItem) return;
         const list = selectedItem.parentNode;
 
-        if (!swapItem || !list) {
+        if (!list) {
           return;
         }
 
