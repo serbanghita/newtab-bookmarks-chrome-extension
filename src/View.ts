@@ -117,23 +117,32 @@ export class View {
       (e.target as HTMLInputElement).setAttribute("placeholder", "Search my bookmarks ...");
     });
 
+    let debounceTimer = 0;
     $searchField.addEventListener("input", (e: Event) => {
-      const query = (e.target as HTMLInputElement).value.trim();
-      const bookmarksFound = this.bookmarks.search(query);
+      clearTimeout(debounceTimer);
 
       $results.replaceChildren();
+      $results.style.display = 'none';
       $bookmarks.classList.remove("blur");
 
-      if (bookmarksFound && bookmarksFound.length > 0) {
-        bookmarksFound.forEach((bookmark) => {
-          const size = this.settings.getValue("bookmarkItemSize") === "large" ? 32 : 16;
-          const $bookmark = this.renderBookmark(bookmark, size, false);
-          $results.appendChild($bookmark);
-        });
+      debounceTimer = window.setTimeout(() => {
+        const query = (e.target as HTMLInputElement).value.trim();
+        if (!query) {
+          return;
+        }
+        const bookmarksFound = this.bookmarks.search(query);
 
-        $results.style.display = 'block';
-        $bookmarks.classList.add("blur");
-      }
+        if (bookmarksFound && bookmarksFound.length > 0) {
+          bookmarksFound.forEach((bookmark) => {
+            const size = this.settings.getValue("bookmarkItemSize") === "large" ? 32 : 16;
+            const $bookmark = this.renderBookmark(bookmark, size, false);
+            $results.appendChild($bookmark);
+          });
+
+          $results.style.display = 'block';
+          $bookmarks.classList.add("blur");
+        }
+      }, 200);
     });
   }
 
