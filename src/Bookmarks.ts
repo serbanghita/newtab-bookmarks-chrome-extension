@@ -89,7 +89,7 @@ export class Bookmarks {
       return results;
     }
 
-    if (treeItem.url && treeItem.title.toLowerCase().search(query.toLowerCase()) !== -1) {
+    if (treeItem.url && treeItem.title.toLowerCase().includes(query.toLowerCase())) {
       results.push(treeItem);
     }
 
