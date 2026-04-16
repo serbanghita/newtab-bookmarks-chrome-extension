@@ -54,12 +54,22 @@ export class View {
           // console.log(selectedItem.innerText, swapItem.innerText);
         }
       });
-      $bookmark.addEventListener("dragend", (e) => {
+      $bookmark.addEventListener("dragend", async (e) => {
         const selectedItem = e.target as HTMLElement;
         selectedItem.classList.remove('drag-sort-active');
-        // Only move if a swap actually occurred
         if (selectedItem.dataset.indexSwap) {
-          this.bookmarks.move(selectedItem.dataset.id || '', selectedItem.dataset.indexSwap, selectedItem.dataset.parentIdSwap || '');
+          try {
+            await this.bookmarks.move(selectedItem.dataset.id || '', selectedItem.dataset.indexSwap, selectedItem.dataset.parentIdSwap || '');
+            // Recompute indices from current DOM order
+            const parent = selectedItem.parentNode;
+            if (parent) {
+              parent.querySelectorAll('.bookmark').forEach((el, i) => {
+                (el as HTMLElement).dataset.index = i.toString();
+              });
+            }
+          } catch (err) {
+            console.warn('Failed to reorder bookmark:', err);
+          }
           delete selectedItem.dataset.indexSwap;
           delete selectedItem.dataset.parentIdSwap;
         }
