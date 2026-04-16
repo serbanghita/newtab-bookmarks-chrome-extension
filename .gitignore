@@ -1,2 +1,4 @@
 node_modules
 .idea
+.chrome-for-testing
+.chrome-dev-profile
