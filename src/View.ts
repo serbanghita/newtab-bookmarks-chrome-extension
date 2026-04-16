@@ -57,10 +57,12 @@ export class View {
       $bookmark.addEventListener("dragend", (e) => {
         const selectedItem = e.target as HTMLElement;
         selectedItem.classList.remove('drag-sort-active');
-        // Re-order in Chrome.
-        this.bookmarks.move(selectedItem.dataset.id || '', selectedItem.dataset.indexSwap || '', selectedItem.dataset.parentIdSwap || '');
-        delete selectedItem.dataset.indexSwap;
-        delete selectedItem.dataset.parentIdSwap;
+        // Only move if a swap actually occurred
+        if (selectedItem.dataset.indexSwap) {
+          this.bookmarks.move(selectedItem.dataset.id || '', selectedItem.dataset.indexSwap, selectedItem.dataset.parentIdSwap || '');
+          delete selectedItem.dataset.indexSwap;
+          delete selectedItem.dataset.parentIdSwap;
+        }
       });
     }
 
