@@ -27,34 +27,43 @@ export class View {
     // Handle drag
     if (isDraggable) {
       $bookmark.setAttribute("draggable", "true");
+      let animationFrame = 0;
       $bookmark.addEventListener("drag", (e: DragEvent) => {
-        const selectedItem = e.target as HTMLElement;
-        if (!selectedItem) {
-          return;
-        }
+        if (animationFrame) return;
+        animationFrame = requestAnimationFrame(() => {
+          animationFrame = 0;
+          const selectedItem = e.target as HTMLElement;
+          if (!selectedItem) {
+            return;
+          }
 
-        const x = e.clientX, y = e.clientY;
+          const x = e.clientX, y = e.clientY;
 
-        selectedItem.classList.add('drag-sort-active');
-        const rawElement = document.elementFromPoint(x, y);
-        if (!rawElement) return;
-        let swapItem = rawElement.closest('.bookmark') as HTMLElement;
-        if (!swapItem) return;
-        const list = selectedItem.parentNode;
+          selectedItem.classList.add('drag-sort-active');
+          const rawElement = document.elementFromPoint(x, y);
+          if (!rawElement) return;
+          let swapItem = rawElement.closest('.bookmark') as HTMLElement;
+          if (!swapItem) return;
+          const list = selectedItem.parentNode;
 
-        if (!list) {
-          return;
-        }
+          if (!list) {
+            return;
+          }
 
-        if (swapItem !== selectedItem && list === swapItem.parentNode) {
-          swapItem = swapItem !== selectedItem.nextSibling as HTMLElement ? swapItem : swapItem.nextSibling as HTMLElement;
-          list.insertBefore(selectedItem, swapItem);
-          selectedItem.dataset.indexSwap = swapItem.dataset.index;
-          selectedItem.dataset.parentIdSwap = swapItem.dataset.parentId;
-          // console.log(selectedItem.innerText, swapItem.innerText);
-        }
+          if (swapItem !== selectedItem && list === swapItem.parentNode) {
+            swapItem = swapItem !== selectedItem.nextSibling as HTMLElement ? swapItem : swapItem.nextSibling as HTMLElement;
+            list.insertBefore(selectedItem, swapItem);
+            selectedItem.dataset.indexSwap = swapItem.dataset.index;
+            selectedItem.dataset.parentIdSwap = swapItem.dataset.parentId;
+            // console.log(selectedItem.innerText, swapItem.innerText);
+          }
+        });
       });
       $bookmark.addEventListener("dragend", async (e) => {
+        if (animationFrame) {
+          cancelAnimationFrame(animationFrame);
+          animationFrame = 0;
+        }
         const selectedItem = e.target as HTMLElement;
         selectedItem.classList.remove('drag-sort-active');
         if (selectedItem.dataset.indexSwap) {
