@@ -21,7 +21,7 @@ export function faviconURL(u: string, imgSize: string) {
 }
 
 export function determineFolderNames(foldersAsString: string) {
-  return foldersAsString.split(',').map((folderName) => folderName.trim());
+  return foldersAsString.split(',').map((folderName) => folderName.trim()).filter(Boolean);
 }
 
 export function truncateLongText(text: string) {
