@@ -93,5 +93,6 @@ export class Settings {
         ? {...this.settings, ...newSettings, firstRun: false}
         : {...this.settings, firstRun: false};
     await chrome.storage.local.set({[Settings.SETTINGS_ROOT_KEY]: settingsToSave});
+    this.settings = settingsToSave;
   }
 }
